@@ -48,9 +48,9 @@ int main() {
 			   vecSub3a(4.0f,4.0f,3.0f), vecSub3b(2.0f,1.0f,0.0f);
 
 	std::cout << "\nTest section subtraction:" << std::endl;
-	std::cout << "a " << vecSub1a << " + b " << vecSub1b << " = " << vecSub1a-vecSub1b << std::endl;
-	std::cout << "a " << vecSub2a << " + b " << vecSub2b << " = " << vecSub2a-vecSub2b << std::endl;
-	std::cout << "a " << vecSub3a << " + b " << vecSub3b << " = " << vecSub3a-vecSub3b << std::endl;
+	std::cout << "a " << vecSub1a << " - b " << vecSub1b << " = " << vecSub1a-vecSub1b << std::endl;
+	std::cout << "a " << vecSub2a << " - b " << vecSub2b << " = " << vecSub2a-vecSub2b << std::endl;
+	std::cout << "a " << vecSub3a << " - b " << vecSub3b << " = " << vecSub3a-vecSub3b << std::endl;
 
 	//Test Vectors for length
 	cg1::Vec3f vecLen1(3.0f,1.0f,4.0f),
@@ -68,9 +68,9 @@ int main() {
 			   vecDot3a(10.0f,-4.0f,1.0f), vecDot3b(3.0f,7.0f,5.0f);
 
 	std::cout << "\nTest section dot product:" << std::endl;
-	std::cout << "a " << vecDot1a << " + b " << vecDot1b << " = " << vecDot1a*vecDot1b << std::endl;
-	std::cout << "a " << vecDot2a << " + b " << vecDot2b << " = " << vecDot2a*vecDot2b << std::endl;
-	std::cout << "a " << vecDot3a << " + b " << vecDot3b << " = " << vecDot3a*vecDot3b << std::endl;
+	std::cout << "a " << vecDot1a << " dot b " << vecDot1b << " = " << vecDot1a*vecDot1b << std::endl;
+	std::cout << "a " << vecDot2a << " dot b " << vecDot2b << " = " << vecDot2a*vecDot2b << std::endl;
+	std::cout << "a " << vecDot3a << " dot b " << vecDot3b << " = " << vecDot3a*vecDot3b << std::endl;
 
 	//Test section normal of a triangle
 	std::cout << "\nTest section normal of a triangle:" << std::endl;
