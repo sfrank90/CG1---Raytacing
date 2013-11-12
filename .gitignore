@@ -22,3 +22,12 @@
 
 # wiki
 wiki/
+
+# Visual Studio Files
+*/Debug/*
+*.sln
+*.sdf
+*.opensdf
+*.vcxproj
+*.vcxproj.filters
+*.v11.suo
