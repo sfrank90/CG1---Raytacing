@@ -22,9 +22,9 @@ public:
     //
     // (1) Calculate zAxis, yAxis and xAxis.
 	// (2) Normalize them.
-	zAxis = dir;
-	xAxis = cross(zAxis, up);
-	yAxis = cross(xAxis, zAxis); //this calculation should be right? tested inverted direction -> primitives are not drawn or not visible
+	zAxis = -dir;
+	xAxis = cross(up, zAxis);
+	yAxis = cross(zAxis, xAxis); //this calculation should be right? tested inverted direction -> primitives are not drawn
 	
 	Normalize(xAxis);
 	Normalize(zAxis);
@@ -59,7 +59,7 @@ public:
     ray.org = pos;
     ray.dir  =  2.0f * xAxis *(x/(float)resX - .5)*aspect
              +  2.0f * yAxis* (y/(float)resY - .5)
-             +  focus * zAxis;
+             -  focus * zAxis;
     ray.t = INFINITY_RAY;
     ray.recursionLevel=0;
     ray.hit = NULL;
