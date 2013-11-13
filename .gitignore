@@ -25,9 +25,14 @@ wiki/
 
 # Visual Studio Files
 */Debug/*
+*.ilk
+*.pdb
 *.sln
 *.sdf
 *.opensdf
 *.vcxproj
 *.vcxproj.filters
 *.v11.suo
+
+#general files
+*.tlog
