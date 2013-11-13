@@ -30,8 +30,13 @@ public:
 	Normalize(yAxis);
 	
     // (3) Calculate the aspect ratio.
+	float y_ratio = length(2 * tan(angle) * dir);
+
     // (4) Calculate the opening angle in radians.
+	angle = angle * (M_PI/180);
+
     // (5) Calculate the focus (distance to plane in pixels).
+	focus = length(dir);
     // IMPLEMENT ME END
   }
 
