@@ -35,6 +35,14 @@ public:
     // If so, set the new ray.t and return true.
     // IMPLEMENT ME END.
 
+    Vec3f diff = origin - ray.org;
+    float t = dot(diff,normal) / dot(ray.dir,normal);
+    if (t < EPSILON || t > ray.t)
+    {
+      return false;
+    }
+    ray.t = t;
+    ray.hit = this;
     return true;
   }
 

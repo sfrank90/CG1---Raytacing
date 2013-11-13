@@ -40,6 +40,9 @@ public:
     Triangle t1(Vec3f(-2, 3.7, 0), Vec3f(1, 2, 1), Vec3f(3, 2.8, -2));
     Triangle t2(Vec3f(3, 2, 3), Vec3f(3, 2, -3), Vec3f(-3, 2, -3));
 
+	/*std::vector<Primitive *> primitive;
+	primitive.push_back*/
+
     // Create camera.
     PerspectiveCamera *camera = NULL;
     if (task == 1.31)
@@ -90,6 +93,25 @@ public:
         //     the pixel color according to the object color
         //     (with Primitive::getColor())
         // IMPLEMENT ME END.
+
+		camera->initRay(x+0.5,y+0.5,ray); // initialize ray
+
+		if(s1.findIntersection(ray))
+			col = Vec3f(1.0f,0,0); //no getColor defined??
+		if(s2.findIntersection(ray)) 
+			col = Vec3f(0,1.0f,0);
+
+		if(s3.findIntersection(ray)) 
+			col = Vec3f(0,0,1.0f);
+
+		if(p1.findIntersection(ray)) 
+			col = Vec3f(0.9f,1.0f,0.0f);
+
+		if(t1.findIntersection(ray)) 
+			col = Vec3f(0.0f,1.0f,1.0f);
+
+		if(t2.findIntersection(ray)) 
+			col = Vec3f(1.0f,1.0f,1.0f);
 
         img[y][x] = col; // store pixel color
         pixel_done++; // add 1 to number of pixels done for progess calculation

@@ -24,7 +24,7 @@ public:
 	// (2) Normalize them.
 	zAxis = dir;
 	xAxis = cross(zAxis, up);
-	yAxis = cross(xAxis, zAxis); //this calculation should be right
+	yAxis = cross(xAxis, zAxis); //this calculation should be right? tested inverted direction -> primitives are not drawn or not visible
 	
 	Normalize(xAxis);
 	Normalize(zAxis);
@@ -56,6 +56,14 @@ public:
     //     with the ray (initially infinity since there is no object).
     // (4) Normalize the ray.
     // IMPLEMENT ME END.
+    ray.org = pos;
+    ray.dir  =  2.0f * xAxis *(x/(float)resX - .5)*aspect
+             +  2.0f * yAxis* (y/(float)resY - .5)
+             +  focus * zAxis;
+    ray.t = INFINITY_RAY;
+    ray.recursionLevel=0;
+    ray.hit = NULL;
+    Normalize(ray.dir);
 
     return true;
   }
