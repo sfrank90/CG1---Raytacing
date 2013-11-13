@@ -22,21 +22,22 @@ public:
     //
     // (1) Calculate zAxis, yAxis and xAxis.
 	// (2) Normalize them.
-	zAxis = -dir;
-	Normalize(zAxis);
-	xAxis = cross(up, zAxis);
+	zAxis = dir;
+	xAxis = cross(zAxis, up);
+	yAxis = cross(xAxis, zAxis); //this calculation should be right
+	
 	Normalize(xAxis);
-	yAxis = cross(zAxis, xAxis);
+	Normalize(zAxis);
 	Normalize(yAxis);
 	
     // (3) Calculate the aspect ratio.
-	float y_ratio = length(2 * tan(angle) * dir);
+	aspect = (float)resX/(float)resY;//length(2 * tan(angle) * dir);
 
     // (4) Calculate the opening angle in radians.
-	angle = angle * (M_PI/180);
+	float radAngle = angle * (M_PI/180.);
 
     // (5) Calculate the focus (distance to plane in pixels).
-	focus = length(dir);
+	focus = 1.f / tan(radAngle/2.f);//length(dir);
     // IMPLEMENT ME END
   }
 
