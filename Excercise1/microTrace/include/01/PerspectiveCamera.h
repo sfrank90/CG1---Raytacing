@@ -21,7 +21,14 @@ public:
     // Use your mathematical derivation from task 1.1.
     //
     // (1) Calculate zAxis, yAxis and xAxis.
-    // (2) Normalize them.
+	// (2) Normalize them.
+	zAxis = -dir;
+	Normalize(zAxis);
+	xAxis = cross(up, zAxis);
+	Normalize(xAxis);
+	yAxis = cross(zAxis, xAxis);
+	Normalize(yAxis);
+	
     // (3) Calculate the aspect ratio.
     // (4) Calculate the opening angle in radians.
     // (5) Calculate the focus (distance to plane in pixels).
