@@ -22,7 +22,7 @@ public:
     //
     // (1) Calculate zAxis, yAxis and xAxis.
 	// (2) Normalize them.
-	zAxis = -dir;
+	zAxis = pos - dir;
 	xAxis = cross(up, zAxis);
 	yAxis = cross(zAxis, xAxis); //this calculation should be right? tested inverted direction -> primitives are not drawn
 	
