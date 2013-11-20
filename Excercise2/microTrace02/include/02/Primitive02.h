@@ -57,9 +57,10 @@ public:
         intensity = intensity * cos_angle;
     else
         intensity = (0.f);
+    Vec3f colored_intens = Vec3f(intensity.x * color.x, intensity.y * color.y, intensity.z * color.z);
 
     // IMPLEMENT ME END
-    return intensity;
+    return colored_intens;
   }
 
 };

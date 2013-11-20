@@ -33,9 +33,9 @@ public:
     //     Multiply it with the light source's intensity.
     // IMPLEMENT ME END
     lightray.dir = position - lightray.org;
-    normalize(lightray.dir);
     lightray.t = length(lightray.dir);
-    intensity = (1./lightray.t*lightray.t)*this->intensity;
+    normalize(lightray.dir);
+    intensity = (1./(lightray.t*lightray.t))*this->intensity;
     return true;
   }
 
