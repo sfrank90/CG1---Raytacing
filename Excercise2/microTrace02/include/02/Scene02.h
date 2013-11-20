@@ -78,6 +78,8 @@ public:
     // IMPLEMENT ME 2.3
     // Make both camera position/direction, and some objects move.
     // IMPLEMENT ME END
+
+    cam->initAxes();
   }
 
   // --------------------------------------------------------------------------

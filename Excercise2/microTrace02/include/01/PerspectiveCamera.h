@@ -17,6 +17,15 @@ public:
   PerspectiveCamera(Vec3f pos, Vec3f dir, Vec3f up, float angle, int resX, int resY)
       : Camera(resX, resY, pos, dir, up), angle(angle)
   {
+    this->initAxes();
+  }
+
+  virtual ~PerspectiveCamera()
+  {
+  }
+
+  void initAxes()
+  {
     // Use your mathematical derivation from task 1.1.
     //
     // (1) Calculate zAxis, yAxis and xAxis.
@@ -36,11 +45,6 @@ public:
     // Opening angle:
     float angleInRad = angle * M_PI / 180.;
     focus = 1.0 / tan(angleInRad / 2.);
-
-  }
-
-  virtual ~PerspectiveCamera()
-  {
   }
 
   virtual bool initRay(float x, float y, Ray &ray)
