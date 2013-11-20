@@ -32,8 +32,8 @@ public:
     //     Remember: it is reciprocal to the squared distance.
     //     Multiply it with the light source's intensity.
     // IMPLEMENT ME END
-    lightray.dir = normalize(position - lightray.origin);
-    lightray.t = length(position - lightray.origin);
+    lightray.dir = normalize(position - lightray.org);
+    lightray.t = length(position - lightray.org);
     intensity = (1./lightray.t*lightray.t)*this->intensity;
     return true;
   }
