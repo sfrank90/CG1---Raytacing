@@ -40,11 +40,11 @@ public:
     // IMPLEMENT ME 2.1
     // (1) Generate a secondary ray. Set the ray origin to the surface point
     //     that has been hit, but do not set direction quite yet.   
-    Ray r2 = new Ray();
+    Ray r2 = Ray();
     r2.org = ray.org + ray.dir * ray.t;
 
     // (2) Call the illuminate method of your light source, store the intensity.
-    Vec3f intensity = (0,0,0);
+    Vec3f intensity = (0.f);
     light->illuminate(r2, intensity);
 
     // (3) Check whether the angle between surface normal and direction to
@@ -52,7 +52,7 @@ public:
     //     If so, modulate the stored intensity with the cosine of the angle
     //     between surface normal and direction to light source.
     Vec3f s_normal = r2.hit->getNormal(r2);
-    float cos_angle = dot(s_normal, r2.dir)/(norm(s_normal)*norm(r2.dir));
+    float cos_angle = dot(s_normal, r2.dir)/(length(s_normal)*length(r2.dir));
     if(cos_angle <= 0)
         intensity = intensity * cos_angle;
     else
