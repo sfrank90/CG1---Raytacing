@@ -53,7 +53,7 @@ public:
     //     between surface normal and direction to light source.
     Vec3f s_normal = ray.hit->getNormal(r2);
     float cos_angle = dot(s_normal, r2.dir)/(length(s_normal)*length(r2.dir));
-    if(cos_angle <= 0)
+    if(cos_angle >= 0)
         intensity = intensity * cos_angle;
     else
         intensity = (0.f);
