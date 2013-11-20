@@ -32,9 +32,9 @@ public:
     //     Remember: it is reciprocal to the squared distance.
     //     Multiply it with the light source's intensity.
     // IMPLEMENT ME END
-    Vec3f dir = position - lightray.org;
-    lightray.dir = normalize(dir);
-    lightray.t = length(dir);
+    lightray.dir = position - lightray.org;
+    normalize(lightray.dir);
+    lightray.t = length(lightray.dir);
     intensity = (1./lightray.t*lightray.t)*this->intensity;
     return true;
   }
