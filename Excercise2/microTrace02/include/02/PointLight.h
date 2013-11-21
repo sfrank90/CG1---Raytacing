@@ -32,10 +32,17 @@ public:
     //     Remember: it is reciprocal to the squared distance.
     //     Multiply it with the light source's intensity.
     // IMPLEMENT ME END
+	lightray.hit = NULL; //Nessecary?!
     lightray.dir = position - lightray.org;
-    lightray.t = length(lightray.dir);
+
+    lightray.t = length(lightray.dir) - EPSILON; //due to the keyword 'almost'?!
+
     normalize(lightray.dir);
-    intensity = (1./(lightray.t*lightray.t))*this->intensity;
+	
+	float rec_lengthSq = 1.0/(lightray.t*lightray.t);
+    
+	intensity = rec_lengthSq*this->intensity;
+
     return true;
   }
 

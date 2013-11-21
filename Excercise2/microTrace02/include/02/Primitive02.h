@@ -51,16 +51,21 @@ public:
     //     light source is <= 90 deg (the surface is lit).
     //     If so, modulate the stored intensity with the cosine of the angle
     //     between surface normal and direction to light source.
-    Vec3f s_normal = ray.hit->getNormal(r2);
-    float cos_angle = dot(s_normal, r2.dir)/(length(s_normal)*length(r2.dir));
-    if(cos_angle >= 0)
+
+    Vec3f s_normal = ray.hit->getNormal(ray); //Error located here, wrong ray used to get correct normal...
+	
+	//dir and normal are already normalized!
+    float cos_angle = dot(s_normal, r2.dir);
+
+   /* if(cos_angle >= 0) //depricated, see below
         intensity = intensity * cos_angle;
     else
-        intensity = (0.f);
-    Vec3f colored_intens = Vec3f(intensity.x * color.x, intensity.y * color.y, intensity.z * color.z);
+        intensity = (0.f);*/
+    
+	//Result
+	return max(0.0, cos_angle)*componentProduct(intensity, color);
 
     // IMPLEMENT ME END
-    return colored_intens;
   }
 
 };
