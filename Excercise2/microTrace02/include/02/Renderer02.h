@@ -30,7 +30,10 @@ public:
   const string createImageFileName(const char* fileName, int step)
   {
     stringstream ss;
-    ss << strndup(fileName, strlen(fileName) - 4);
+    // ss << strndup(fileName, strlen(fileName) - 4); //bad code
+	std::string strFile(fileName);
+	strFile.erase(strFile.end()-4, strFile.end());
+	ss << strFile;
     ss << "_";
     ss << setfill('0');
     ss << setw(4);
