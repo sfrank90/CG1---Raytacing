@@ -60,7 +60,7 @@ public:
     }
 
     // Delete textures.
-#if ENABLE_TEXTURES == true
+#if ENABLE_TEXTURES
     {
       for (vector<Texture*>::iterator it = textures.begin(); it != textures.end(); ++it)
       {
@@ -100,7 +100,7 @@ public:
     lights.push_back(light);
   }
 
-#if ENABLE_TEXTURES == true
+#if ENABLE_TEXTURES
   /**
    * Adds a new texture.
    */
@@ -173,7 +173,8 @@ public:
    */
   void parseOBJ(const char *fileName, Shader* shd, OBJStyle objstyle, TriangleStyle tstyle, int factor)
   {
-    FILE *file = fopen(fileName, "r");
+    FILE *file;
+	fopen_s(&file, fileName, "r");
     if (file == NULL)
     {
       cout << "(Scene): Could not open OBJ file: " << fileName << endl;
@@ -202,7 +203,7 @@ public:
       if (strncmp(line, "v ", 2) == 0)
       {
         float a, b, c;
-        sscanf(line, "v %f %f %f", &a, &b, &c);
+        sscanf_s(line, "v %f %f %f", &a, &b, &c);
 
         vert.push_back(a);
         vert.push_back(b);
@@ -213,7 +214,7 @@ public:
       if (strncmp(line, "vn ", 3) == 0)
       {
         float a, b, c;
-        sscanf(line, "vn %f %f %f", &a, &b, &c);
+        sscanf_s(line, "vn %f %f %f", &a, &b, &c);
 
         normals.push_back(a);
         normals.push_back(b);
@@ -224,7 +225,7 @@ public:
       if (strncmp(line, "vt ", 2) == 0)
       {
         float a, b;
-        sscanf(line, "vt %f %f", &a, &b);
+        sscanf_s(line, "vt %f %f", &a, &b);
 
         texus.push_back(a);
         texvs.push_back(b);
@@ -239,7 +240,7 @@ public:
 
         if (objstyle == TEXTURENORMALS)
         {
-          sscanf(line, "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &a1, &a2, &b, &b1, &b2, &c, &c1, &c2);
+          sscanf_s(line, "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &a1, &a2, &b, &b1, &b2, &c, &c1, &c2);
           texturesID.push_back(a1);
           texturesID.push_back(b1);
           texturesID.push_back(c1);
@@ -250,14 +251,14 @@ public:
         }
         else if (objstyle == NORMALS)
         {
-          sscanf(line, "f %d/%d %d/%d %d/%d", &a, &a1, &b, &b1, &c, &c1);
+          sscanf_s(line, "f %d/%d %d/%d %d/%d", &a, &a1, &b, &b1, &c, &c1);
           normalsID.push_back(a1);
           normalsID.push_back(b1);
           normalsID.push_back(c1);
         }
         else if (objstyle == NONORMALS)
         {
-          sscanf(line, "f %d %d %d", &a, &b, &c); // Only triangles given.
+          sscanf_s(line, "f %d %d %d", &a, &b, &c); // Only triangles given.
         }
         else
         {

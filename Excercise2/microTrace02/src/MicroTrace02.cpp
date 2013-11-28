@@ -1,7 +1,7 @@
 #define SHEET 2
 #define RESX 640                  // image x-resolution
 #define RESY 480                  // image y-resolution
-#define ENABLE_TEXTURES false     // whether textures are supported.
+#define ENABLE_TEXTURES 0     // whether textures are supported.
 #define NUM_SAMPLES 1000          // number of samples for lights
 #define MAX_RECURSION_LEVEL 30    // recursion level for reflections and refractions
 // ----------------------------------------------------------------------------
