@@ -7,9 +7,10 @@
 
 class Triangle: public Primitive02
 {
+public:
   Vec3f a, b, c;
 
-public:
+
   Triangle(Vec3f a, Vec3f b, Vec3f c, Light *light, Vec3f color)
       : Primitive02(color, light), a(a), b(b), c(c)
   {

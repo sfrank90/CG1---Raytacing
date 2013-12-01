@@ -29,7 +29,7 @@ enum TriangleStyle
 
 class Texture;
 // forward declaration
-
+class Spline;
 // ----------------------------------------------------------------------------
 
 class Scene
@@ -42,6 +42,8 @@ public:
   std::vector<Texture*> textures;     // textures
   std::set<Shader*> shaders;          // shaders on primitives (re-usable)
   Camera *camera;                     // camera (with or without DoF)
+  // Splines 
+  std::vector<Spline> splines;
 
   Scene(int resx, int resy)
       : resx(resx), resy(resy), bgColor(Vec3f(0, 0, 0)), camera(NULL)
@@ -213,7 +215,6 @@ public:
     Vec3f min_tri = Vec3f(+INFINITY);
     Vec3f max_tri = Vec3f(-INFINITY);
 #endif
-
     // Read vertices, normals, textures, and faces.
     while (fgets(line, 1000, file) && !feof(file))
     {
@@ -248,7 +249,6 @@ public:
         texus.push_back(a);
         texvs.push_back(b);
       }
-
       // Faces.
       if (strncmp(line, "f ", 2) == 0)
       {
@@ -269,7 +269,7 @@ public:
         }
         else if (objstyle == NORMALS)
         {
-          sscanf(line, "f %d/%d %d/%d %d/%d", &a, &a1, &b, &b1, &c, &c1);
+          sscanf(line, "f %d//%d %d//%d %d//%d", &a, &a1, &b, &b1, &c, &c1);
           normalsID.push_back(a1);
           normalsID.push_back(b1);
           normalsID.push_back(c1);
@@ -288,7 +288,6 @@ public:
         faces.push_back(c);
       }
     }
-
     // For each face, add the corresponding triangle primitive.
     for (unsigned int n = 0; n < faces.size() / 3; n++)
     {
@@ -304,7 +303,6 @@ public:
       vertID[0] = faces[n * 3 + 0] - 1;
       vertID[1] = faces[n * 3 + 1] - 1;
       vertID[2] = faces[n * 3 + 2] - 1;
-
       // Any kind of normals?
       if ((objstyle == NORMALS) || (objstyle == TEXTURENORMALS))
       {
@@ -324,7 +322,6 @@ public:
       tri[2][0] = vert[vertID[2] * 3 + 0] * vscale[0] + vtrans[0];
       tri[2][1] = vert[vertID[2] * 3 + 1] * vscale[1] + vtrans[1];
       tri[2][2] = vert[vertID[2] * 3 + 2] * vscale[2] + vtrans[2];
-
       // Max and min vertices (approximate, using only 1st corner of triangle).
 #if DEBUG_PARSE_OBJ_MAX_COMPONENT > 0
       min_tri = minComponent(min_tri, tri[0]);
@@ -346,7 +343,6 @@ public:
         norm[2][1] = normals[normID[2] * 3 + 1];
         norm[2][2] = normals[normID[2] * 3 + 2];
       }
-
       // Smooth triangle with texture?
       if ((objstyle == TEXTURENORMALS) && (tstyle == SMOOTH))
       {
@@ -363,7 +359,7 @@ public:
         tex[1][2] = 0;
         tex[2][2] = 0;
       }
-
+	  	cout << "bla5 " <<  endl;
       // Use virtual method to determine the type of triangle added.
       add(createTrianglePrimitive(shd, tstyle, objstyle, tri, norm, tex));
     }
