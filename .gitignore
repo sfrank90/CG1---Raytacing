@@ -32,6 +32,10 @@ wiki/
 *.vcxproj
 *.vcxproj.filters
 *.v11.suo
+*.idb
+*.lastbuildstate
+
 
 #general files
 *.tlog
+*.unsuccessfulbuild
