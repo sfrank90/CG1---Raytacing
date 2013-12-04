@@ -43,6 +43,7 @@ public:
     //     sources, using phi and theta1/theta2.
     // (4) Abort if the shadow ray is occluded.
     // IMPLEMENT ME END
+	Vec3f result;
 
     return result;
   }
