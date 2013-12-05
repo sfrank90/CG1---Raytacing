@@ -54,9 +54,9 @@ public:
 		///////////////////////////////////////////////////////////////////////////
 		
 		//only calcualte albedo from all PointLights because there are no ohter light types yet
-		if(typeid(*l) != typeid(PointLight*)) {
+		/*if(typeid(*l) != typeid(PointLight*)) {
 			continue;
-		}
+		}*/ //it's better to work with a dynamic cast I think...
 
 		// You have to cast the general light class to its derivative "PointLight" because "Light" isn't holding neither an Intensity nor a position.
 		// shadow ray dir to specific light source
