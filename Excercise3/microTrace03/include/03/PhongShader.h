@@ -2,6 +2,7 @@
 #ifndef PHONGSHADER_H
 #define PHONGSHADER_H
 
+#include <typeinfo>
 #include "../Shader.h"
 
 class PhongShader: public Shader
@@ -45,19 +46,26 @@ public:
 	Ray shadow_ray = Ray();
 	shadow_ray.org = ray.org + ray.dir * ray.t;
 
-	int num_lights = scene->lights.size();
+	//int num_lights = scene->lights.size();
 	for (std::vector<Light*>::iterator l = scene->lights.begin(); l != scene->lights.end(); ++l)
     {
 		// ERROR: komme nicht an die daten der lichtquellen (position und intensity)
+		// Alex: Bitte schoen :>
 		///////////////////////////////////////////////////////////////////////////
+		
+		//only calcualte albedo from all PointLights because there are no ohter light types yet
+		if(typeid(*l) != typeid(PointLight*)) {
+			continue;
+		}
 
+		// You have to cast the general light class to its derivative "PointLight" because "Light" isn't holding neither an Intensity nor a position.
 		// shadow ray dir to specific light source
-		shadow_ray.dir = position - shadow_ray.org;
+		shadow_ray.dir = ((PointLight*)(*l))->position - shadow_ray.org;
 
 		//add diffuse term for each light detected
-		diffuse_term += kd * componentProduct(color, intensity) * dot(shadow_ray.dir, s_normal);
+		diffuse_term += kd * componentProduct(color, ((PointLight*)(*l))->intensity) * dot(shadow_ray.dir, s_normal);
 		//add diffuse term for each light detected
-		specular_term += ks * componentProduct(color, intensity) * pow(dot(shadow_ray.dir, s_normal), ke);
+		specular_term += ks * componentProduct(color, ((PointLight*)(*l))->intensity) * pow(dot(shadow_ray.dir, s_normal), ke);
 	}
 
     // (4) Abort if the shadow ray is occluded.
