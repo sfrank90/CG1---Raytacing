@@ -31,6 +31,8 @@ public:
     // IMPLEMENT ME 3.2
     // (1) Get shading normal and turn normal to front if necessary.
 	Vec3f s_normal = ray.hit->getNormal(ray);
+	if (dot(s_normal,ray.dir) > 0)
+			s_normal = -s_normal;
 
     // (2) Calculate ambient term (intensity = 1).
 	Vec3f rad_amb = Vec3f(1.0,1.0,1.0);
@@ -57,22 +59,25 @@ public:
 		/*if(typeid(*l) != typeid(PointLight*)) {
 			continue;
 		}*/ //it's better to work with a dynamic cast I think...
-
-		// You have to cast the general light class to its derivative "PointLight" because "Light" isn't holding neither an Intensity nor a position.
+		Vec3f intensity;
+		if((*l)->illuminate(shadow_ray, intensity) && 	!scene->isOccluded(shadow_ray)) {
+		
+			// You have to cast the general light class to its derivative "PointLight" because "Light" isn't holding neither an Intensity nor a position.
 		// shadow ray dir to specific light source
-		shadow_ray.dir = ((PointLight*)(*l))->position - shadow_ray.org;
-
+		//shadow_ray.dir = ((PointLight*)(*l))->position - shadow_ray.org;
+		//normalize(shadow_ray.dir);
 		//add diffuse term for each light detected
-		diffuse_term += kd * componentProduct(color, ((PointLight*)(*l))->intensity) * dot(shadow_ray.dir, s_normal);
+		
+		    diffuse_term +=  componentProduct(kd *color, intensity* max(dot(shadow_ray.dir, s_normal), 0)) ;
 		//add diffuse term for each light detected
-		specular_term += ks * componentProduct(color, ((PointLight*)(*l))->intensity) * pow(dot(shadow_ray.dir, s_normal), ke);
+		//specular_term += ks * componentProduct(color, ((PointLight*)(*l))->intensity) * pow(dot(shadow_ray.dir, s_normal), ke);
+		}
 	}
 
     // (4) Abort if the shadow ray is occluded.
-	if(scene->isOccluded(ray))
-		return result;
 
-	else result = ambient_term + diffuse_term + specular_term;
+
+	result = ambient_term + diffuse_term + specular_term;
     // IMPLEMENT ME END
 
     return result;
