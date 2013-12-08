@@ -206,10 +206,10 @@ public:
 		parseOBJ("materials/models/mot1.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
 		int numTris = (int)primitive.size();
 		int numSamplePoints = 5;
-		parseOBJ("materials/models/mot2.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot3.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot4.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot5.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot2.obj", NULL, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot3.obj", NULL, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot4.obj", NULL, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot5.obj", NULL, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
 
 		splines.resize(numTris*3);
 
@@ -221,7 +221,7 @@ public:
 			}
 		}
 		primitive.erase (primitive.begin()+numTris,primitive.end());
-		shaders.erase (shaders.begin()+numTris,shaders.end());
+		//shaders.erase (shaders.begin()+numTris,shaders.end());
 
 		PhongShader *pshd4 = new PhongShader(this, Vec3f(1, 1, 0), 0.1, 0.5, 0.5, 40);
 		p1->shader = pshd4;
@@ -269,13 +269,18 @@ public:
 			k++;
 		else 
 			k--;
-		for(int i = 0; i < primitive.size(); i++) {
+		for(int i = 0; i < primitive.size()-2; i++) {
 			((Triangle*)primitive[i])->a = splines[i*3+0].getInterpolatedSplinePoint((k-1)/20.0f);
 			((Triangle*)primitive[i])->b = splines[i*3+1].getInterpolatedSplinePoint((k-1)/20.0f);
 			((Triangle*)primitive[i])->c = splines[i*3+2].getInterpolatedSplinePoint((k-1)/20.0f);
 		}
 		std::cout << "k = " << k << std::endl;
 	}
+	//Primitive before last is a Plane
+	InfinitePlane* p = (InfinitePlane*)(primitive[primitive.size()-2]);
+	//Last primitve is a Sphere
+	Sphere* s = (Sphere*)(primitive[primitive.size()-1]);
+
 	// end part for animation
     cam->initAxes();
   }
