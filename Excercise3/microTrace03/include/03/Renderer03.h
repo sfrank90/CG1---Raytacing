@@ -27,6 +27,7 @@ public:
    */
   virtual void render(const char *fileName, const double task)
   {
+	int ticks;
     // Define a scene.
     Scene03 scene = Scene03(RESX, RESY);
     scene.build03(task);
@@ -37,8 +38,10 @@ public:
 
     float percent_per_pixel = 100.f / (scene.camera->resX * scene.camera->resY); // percentage for process
     int pixel_done = 0;
-
-    for (int t = 1; t <= NUM_FRAMES; t++)
+	if(task == 3.15)
+		ticks = 40;
+	else ticks = NUM_FRAMES;
+    for (int t = 1; t <= ticks; t++)
     {
       scene.tick(t); // update scene
       std::string fileNameN = createImageFileName(fileName, t); // get filename for frame t
