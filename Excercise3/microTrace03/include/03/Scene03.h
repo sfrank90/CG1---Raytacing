@@ -275,6 +275,16 @@ public:
 			((Triangle*)primitive[i])->c = splines[i*3+2].getInterpolatedSplinePoint((k-1)/20.0f);
 		}
 		std::cout << "k = " << k << std::endl;
+
+		Sphere *s2 = (Sphere*) this->primitive[primitive.size()-1];
+		float pi = 3.14159265359;
+		float oldXS2 = s2->center.x; float oldZS2 = s2->center.z;
+		float da = 1.0f/20.0f;
+
+		if(t > 1) {
+			s2->center.x =  oldXS2 * cos(pi*da) - oldZS2 * sin(pi*da);
+			s2->center.z =  oldXS2 * sin(pi*da) + oldZS2 * cos(pi*da);
+		}
 	}
 	//Primitive before last is a Plane
 	InfinitePlane* p = (InfinitePlane*)(primitive[primitive.size()-2]);
