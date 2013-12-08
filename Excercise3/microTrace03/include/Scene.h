@@ -29,7 +29,7 @@ enum TriangleStyle
 
 class Texture;
 // forward declaration
-
+class Spline;
 // ----------------------------------------------------------------------------
 
 class Scene
@@ -42,6 +42,7 @@ public:
   std::vector<Texture*> textures;     // textures
   std::set<Shader*> shaders;          // shaders on primitives (re-usable)
   Camera *camera;                     // camera (with or without DoF)
+  std::vector<Spline> splines;
 
   Scene(int resx, int resy)
       : resx(resx), resy(resy), bgColor(Vec3f(0, 0, 0)), camera(NULL)
