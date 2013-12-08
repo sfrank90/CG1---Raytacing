@@ -220,6 +220,8 @@ public:
 				splines[i*3+2].addSplinePoint(((Triangle*)primitive[numTris*j + i])->c);
 			}
 		}
+		primitive.erase (primitive.begin()+numTris,primitive.end());
+		shaders.erase (shaders.begin()+numTris,shaders.end());
 
 		PhongShader *pshd4 = new PhongShader(this, Vec3f(1, 1, 0), 0.1, 0.5, 0.5, 40);
 		p1->shader = pshd4;
@@ -229,7 +231,7 @@ public:
 
 		this->add(p1);
 		this->add(s2);
-		primitive.erase (primitive.begin()+numTris,primitive.end());		
+				
 	} 
 	
 	else
