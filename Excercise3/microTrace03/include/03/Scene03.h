@@ -82,9 +82,9 @@ private:
 
 class Scene03: public Scene
 {
-private:
-	int animation;
+	
 public:
+	bool animation;
   Scene03(int resx, int resy)
       : Scene(resx, resy)
   {
@@ -101,7 +101,7 @@ public:
    */
   void build03(const double task)
   {
-	animation = 0;
+	animation = false;
     this->camera = new PerspectiveCamera(Vec3f(0, 0, 8), Vec3f(0, 0, -1), Vec3f(0, 1, 0), 60, RESX, RESY);
 
     // Default: EyeLight surface shaders.
@@ -199,18 +199,17 @@ public:
 
     // Add primitives to scene.
 	if(task == 3.15)
-	{
-		animation = 1;
-		
-		MirrorShader *mshd1 = new MirrorShader(this, Vec3f(1, 1, 1));
+	{	
+		animation = true;
+		BRDFShader *shdBRDF2 = new BRDFShader(this, "materials/brdfs/gold-paint.binary", Vec3f(5, 5, 5));
 
-		parseOBJ("materials/models/mot1.obj", mshd1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot1.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
 		int numTris = (int)primitive.size();
 		int numSamplePoints = 5;
-		parseOBJ("materials/models/mot2.obj", mshd1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot3.obj", mshd1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot4.obj", mshd1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot5.obj", mshd1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot2.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot3.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot4.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
+		parseOBJ("materials/models/mot5.obj", shdBRDF2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
 
 		splines.resize(numTris*3);
 
@@ -222,58 +221,10 @@ public:
 			}
 		}
 		primitive.erase (primitive.begin()+numTris,primitive.end());
-	} 
 
-	if(task == 3.25)
-	{
-		animation = 1;
-		
-		PhongShader *pshd2 = new PhongShader(this, Vec3f(0, 1, 0), 0.1, 0.5, 0.5, 40);
-
-		parseOBJ("materials/models/mot1.obj", pshd2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		int numTris = (int)primitive.size();
-		int numSamplePoints = 5;
-		parseOBJ("materials/models/mot2.obj", pshd2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot3.obj", pshd2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot4.obj", pshd2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot5.obj", pshd2, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-
-		splines.resize(numTris*3);
-
-		for(int i = 0; i < numTris; i++) {
-			for(int j = 0; j < numSamplePoints; j++) {
-				splines[i*3+0].addSplinePoint(((Triangle*)primitive[numTris*j + i])->a);
-				splines[i*3+1].addSplinePoint(((Triangle*)primitive[numTris*j + i])->b);
-				splines[i*3+2].addSplinePoint(((Triangle*)primitive[numTris*j + i])->c);
-			}
-		}
-		primitive.erase (primitive.begin()+numTris,primitive.end());
-	} 
-
-	if(task == 3.35)
-	{
-		animation = 1;
-		
-		BRDFShader *shdBRDF1 = new BRDFShader(this, "materials/brdfs/green-acrylic.binary", Vec3f(10, 10, 10));
-
-		parseOBJ("materials/models/mot1.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		int numTris = (int)primitive.size();
-		int numSamplePoints = 5;
-		parseOBJ("materials/models/mot2.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot3.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot4.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-		parseOBJ("materials/models/mot5.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-2.0f,0.0f));
-
-		splines.resize(numTris*3);
-
-		for(int i = 0; i < numTris; i++) {
-			for(int j = 0; j < numSamplePoints; j++) {
-				splines[i*3+0].addSplinePoint(((Triangle*)primitive[numTris*j + i])->a);
-				splines[i*3+1].addSplinePoint(((Triangle*)primitive[numTris*j + i])->b);
-				splines[i*3+2].addSplinePoint(((Triangle*)primitive[numTris*j + i])->c);
-			}
-		}
-		primitive.erase (primitive.begin()+numTris,primitive.end());
+		//MirrorShader *mshd1 = new MirrorShader(this, Vec3f(1, 1, 1));
+		//p1->shader = mshd1;
+		//this->add(p1);
 	} 
 	
 	else
@@ -302,23 +253,23 @@ public:
   {
 	
     PerspectiveCamera *cam = (PerspectiveCamera*) this->camera;
-	if(animation == 1)
+
+	//ticks for animation
+	if(animation)
 	{
 		static int k = 0;
-
 		if(t <= 20)
 			k++;
 		else 
 			k--;
-
 		for(int i = 0; i < primitive.size(); i++) {
 			((Triangle*)primitive[i])->a = splines[i*3+0].getInterpolatedSplinePoint((k-1)/20.0f);
 			((Triangle*)primitive[i])->b = splines[i*3+1].getInterpolatedSplinePoint((k-1)/20.0f);
 			((Triangle*)primitive[i])->c = splines[i*3+2].getInterpolatedSplinePoint((k-1)/20.0f);
 		}
-
 		std::cout << "k = " << k << std::endl;
 	}
+	// end part for animation
     cam->initAxes();
   }
 
