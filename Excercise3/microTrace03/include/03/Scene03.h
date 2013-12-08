@@ -118,7 +118,7 @@ public:
     // Light sources (2 point lights).
     Vec3f pointLightIntensity(50, 50, 50);
     Vec3f lightPosition1(+4, +5, +6);
-    Vec3f lightPosition2(-3, +5, +4);
+    Vec3f lightPosition2(-3, +5, 4);
     PointLight *pointLight1 = new PointLight(this, lightPosition1, pointLightIntensity);
     PointLight *pointLight2 = new PointLight(this, lightPosition2, pointLightIntensity);
     this->add(pointLight1);
