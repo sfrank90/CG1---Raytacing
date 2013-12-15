@@ -64,6 +64,12 @@ public:
     // (2) Or assign linear falloff from 1 at alpha_min to 0 at alpha_max.
     // IMPLEMENT ME END
 
+	if(alpha < m_alpha_min) {
+		intensity = m_intensity * falloff;
+	} else {
+		intensity = m_intensity * falloff *( 1.0f - (alpha - m_alpha_min)/(m_alpha_max - m_alpha_min) );
+	}
+
     return true;
   }
 
