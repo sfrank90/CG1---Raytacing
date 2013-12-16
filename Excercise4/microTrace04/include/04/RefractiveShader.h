@@ -73,7 +73,7 @@ public:
 		ray.recursionLevel++;
 
 		/* solving the fresnel equation */
-		if(false ) { //sieht besser aus :>
+		if(true) { //sieht besser aus :>
 			n = 1.0f / n;
 			float g = sqrt(n * n + c1 * c1 - 1.0f);
 			float F = 0.5f * pow(g - c1, 2) / pow(g + c1, 2) * (1.0f + pow((c1 * (g + c1) - 1.0f), 2)) / pow((c1 * (g - c1) + 1.0f), 2);

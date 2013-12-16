@@ -1,7 +1,7 @@
 #define SHEET 4
 #define RESX 640                  // image x-resolution
 #define RESY 480                  // image y-resolution
-#define NUM_FRAMES 1             // number of frames to be rendered.
+#define NUM_FRAMES 40             // number of frames to be rendered.
 #define ENABLE_TEXTURES false     // whether textures are supported.
 #define NUM_SAMPLES 1             // number of samples for lights
 #define MAX_RECURSION_LEVEL 30    // recursion level for reflections and refractions

@@ -150,8 +150,8 @@ public:
 	else if(task >= 4.4 && task < 4.5) {
 		delete s1; delete s3;
 		RefractiveShader *shdRef1 = new RefractiveShader(this, Vec3f(1.0, 1.0, 1.0), 1.0, 1.0, 1.3);
-		RefractiveShader *shdRef2 = new RefractiveShader(this, Vec3f(0.2, 0.2, 1.0), 1.0, 1.0, 1.55277);
-		RefractiveShader *shdRef3 = new RefractiveShader(this, Vec3f(1.0, 0.2, 0.2), 1.0, 1.0, 3.49713);
+		RefractiveShader *shdRef2 = new RefractiveShader(this, Vec3f(0.2, 1.0, 1.0), 1.0, 1.0, 1.55277);
+		RefractiveShader *shdRef3 = new RefractiveShader(this, Vec3f(1.0, 1.0, 0.2), 1.0, 1.0, 0.49713);
 		s1 = new Sphere(Vec3f(0.0, 0.8, 5), 1.5, shdRef1);
 		s2 = new Sphere(Vec3f(0.0, 0.8, -5), 1.5, shdRef2);
 		s3 = new Sphere(Vec3f(5, 0.8, 0.0), 1.5, shdRef3);
@@ -171,7 +171,7 @@ public:
 	if(task >= 4.4 && task < 4.5) {
 		//BRDFShader *shdBRDF2 = new BRDFShader(this, "materials/brdfs/gold-paint.binary", Vec3f(5, 5, 5));
 
-		parseOBJ("materials/models/mot1.obj", shdBRDF1, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-1.0f,0.0f));
+		parseOBJ("materials/models/cow.obj", shd1, NONORMALS, STANDARD, Vec3f(1.0f), Vec3f(0.0f,-1.0f,0.0f));
 		/*int numTris = (int)primitive.size();
 		int numSamplePoints = 5;
 		parseOBJ("materials/models/mot2.obj", NULL, NONORMALS, STANDARD, Vec3f(0.05f,0.05f,0.05f), Vec3f(0.0f,-1.0f,0.0f));
