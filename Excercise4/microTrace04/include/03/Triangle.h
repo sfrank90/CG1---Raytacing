@@ -7,9 +7,10 @@
 
 class Triangle: public Primitive03
 {
-  Vec3f a, b, c;
 
-public:
+
+public: 
+	Vec3f a, b, c;
   Triangle(Vec3f a, Vec3f b, Vec3f c, Shader *shader)
       : Primitive03(shader), a(a), b(b), c(c)
   {

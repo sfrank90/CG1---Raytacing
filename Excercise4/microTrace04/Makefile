@@ -32,4 +32,4 @@ MicroTrace08: Image.o MicroTrace08.o
 MicroTrace09: Image.o MicroTrace09.o #libMicroTrace99.a
 
 clean:
-	rm -f *.o MicroTrace* libMicroTrace*.a output/*.ppm output/*.gif 2>/dev/null; echo "Cleaned."
+	rm -f *.o MicroTrace* libMicroTrace*.a  2>/dev/null; echo "Cleaned."
