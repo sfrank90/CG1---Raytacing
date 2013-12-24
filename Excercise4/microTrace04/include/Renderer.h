@@ -36,14 +36,17 @@ public:
    */
   const std::string createImageFileName(const char* fileName, int step)
   {
-    std::stringstream ss;
-    ss << strndup(fileName, strlen(fileName) - 4);
-    ss << "_";
-    ss << std::setfill('0');
-    ss << std::setw(4);
-    ss << step;
-    ss << ".ppm";
-    return ss.str();
+      stringstream ss;
+      // ss << strndup(fileName, strlen(fileName) - 4); //bad code
+      std::string strFile(fileName);
+      strFile.erase(strFile.end()-4, strFile.end());
+      ss << strFile;
+      ss << "_";
+      ss << setfill('0');
+      ss << setw(4);
+      ss << step;
+      ss << ".ppm";
+      return ss.str();
   }
 
 };
