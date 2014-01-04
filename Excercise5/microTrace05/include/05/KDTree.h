@@ -42,6 +42,14 @@ struct KDTree
 
       // IMPLEMENT ME 5.1c
       // Traverse tree and return child or true respectively.
+	  if(d <= t0) {
+		  return child[back]->traverse(ray, t0, t1); //at back
+	  } else if (d >= t1) {
+		  return child[front]->traverse(ray, t0, t1); //at front
+	  } else {
+		  if(child[front]->traverse(ray, t0, d)) return true;
+		  return child[back]->traverse(ray, d, t1);
+	  }
 	  /*if (split - ray.org[dim] >= 0) {
 		  //t0 = node.left;
 		  //t1 = node.right;
@@ -122,11 +130,21 @@ struct KDTree
 
     // IMPLEMENT ME 5.1c
     // (1) Split node.
-	node->split = (dim / 2.f);
+	node->split = (bounds.max[dim]+bounds.min[dim]) / 2.0f;
+	
+	// ok, must (of course) also be redefined after splitting occured...
+	lBounds.max[dim] = node->split;
+	rBounds.min[dim] = node->split;
+
     // (2) Iterate over primitives. Add left and right primitives.
 	for(std::vector<Primitive *>::iterator it = prim.begin(); it != prim.end(); ++it) 
 	{
 		// add left and right primitives to specific vector
+		Primitive05* p = (Primitive05*)(*it);
+		if(p->isInVoxel(lBounds))
+			lPrim.push_back(*it);
+		if(p->isInVoxel(rBounds))
+			rPrim.push_back(*it);
 	}
     // (3) Build next trees using left and right bounds.
 	node->child[0] = buildTree(lBounds, lPrim, node->dim + 1);

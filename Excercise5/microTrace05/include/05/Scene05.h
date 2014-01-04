@@ -141,7 +141,9 @@ public:
 	boundingBox->clearBox();
     // (2) Get a box for each primitive, calculate their bounds.
 	for(int i = 0; i < primitive.size(); i++) {
-		(Primitive05*)primitive[i];
+		Primitive05 *p = (Primitive05*)(primitive[i]);
+		Box bb = p->calcBounds();
+		boundingBox->extendBox(bb);
 	}
     // (3) Extend the values of the empty bounding box to include
     //     the box of each primitive.

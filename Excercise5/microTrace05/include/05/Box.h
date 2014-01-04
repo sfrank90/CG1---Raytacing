@@ -31,12 +31,15 @@ public:
   {
     // IMPLEMENT ME 5.1a
     // Set the minimum and maximum so that a is inside.
-	if (a.x<min.x) min.x = a.x;
-	else if (a.x>max.x) max.x = a.x;
-	if (a.y<min.y) min.y = a.y;
-	else if (a.y>max.y) max.y = a.y;
-	if (a.z<min.z) min.z = a.z;
-	else if (a.z>max.z) max.z = a.z;
+	//if (a.x<min.x) min.x = a.x;
+	//else if (a.x>max.x) max.x = a.x;
+	//if (a.y<min.y) min.y = a.y;
+	//else if (a.y>max.y) max.y = a.y;
+	//if (a.z<min.z) min.z = a.z;
+	//else if (a.z>max.z) max.z = a.z;
+	// easier to read -> defined in vec3f
+	min = minComponent(a, min);
+	max = maxComponent(a, max);
     // IMPLEMENT ME END
   }
 
@@ -57,13 +60,17 @@ public:
     // IMPLEMENT ME 5.1a
     // Determine whether the boxes overlap.
 	
-	if (max.x < b.min.x) return false; 
-    if (min.x > b.max.x) return false; 
-    if (max.y < b.min.y) return false; 
-    if (min.y > b.max.y) return false; 
-	if (max.z < b.min.z) return false; 
-    if (min.z > b.max.z) return false;
-    return true; // boxes overlap
+	//if (max.x < b.min.x) return false; 
+ //   if (min.x > b.max.x) return false; 
+ //   if (max.y < b.min.y) return false; 
+ //   if (min.y > b.max.y) return false; 
+	//if (max.z < b.min.z) return false; 
+ //   if (min.z > b.max.z) return false;
+ //   return true; // boxes overlap
+	for(int i = 0; i < 3; ++i)
+		if(b.min[i] > max[i] || b.max[i] < min[i])
+			return false;
+	return true;
     // IMPLEMENT ME END
   }
 
@@ -76,6 +83,7 @@ public:
     // IMPLEMENT ME 5.1a
     // Determine near and far point of the ray cutting the box.
 	float tmin_x, tmax_x, tmin_y, tmax_y, tmin_z, tmax_z;
+
 	tmin_x = (min.x - ray.org.x) / ray.dir.x;
 	tmax_x = (max.x - ray.org.x) / ray.dir.x;
 
