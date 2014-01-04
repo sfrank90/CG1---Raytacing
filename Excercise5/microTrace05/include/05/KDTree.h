@@ -46,10 +46,12 @@ struct KDTree
 		  return child[back]->traverse(ray, t0, t1); //at back
 	  } else if (d >= t1) {
 		  return child[front]->traverse(ray, t0, t1); //at front
-	  } else {
-		  if(child[front]->traverse(ray, t0, d)) return true;
-		  return child[back]->traverse(ray, d, t1);
-	  }
+	  } 
+	  if(child[front]->traverse(ray, t0, d)) 
+			return true;
+		  
+	  return child[back]->traverse(ray, d, t1);
+	  
 	  /*if (split - ray.org[dim] >= 0) {
 		  //t0 = node.left;
 		  //t1 = node.right;
@@ -141,10 +143,12 @@ struct KDTree
 	{
 		// add left and right primitives to specific vector
 		Primitive05* p = (Primitive05*)(*it);
-		if(p->isInVoxel(lBounds))
+		if(p->isInVoxel(lBounds)) {
 			lPrim.push_back(*it);
-		if(p->isInVoxel(rBounds))
+		}
+		if(p->isInVoxel(rBounds)) {
 			rPrim.push_back(*it);
+		}
 	}
     // (3) Build next trees using left and right bounds.
 	node->child[0] = buildTree(lBounds, lPrim, node->dim + 1);

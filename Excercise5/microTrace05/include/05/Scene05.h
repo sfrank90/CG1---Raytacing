@@ -158,6 +158,7 @@ public:
     calcBounds(&boundingBox);
     cout << "KdTree: Scene bounds are: " << boundingBox.min << " to " << boundingBox.max << endl;
     kdTree = new KDTree(boundingBox, primitive);
+	cout << "Ok!" << endl;
     accelerated = true;
   }
 
