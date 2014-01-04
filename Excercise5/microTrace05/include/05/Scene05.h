@@ -138,10 +138,10 @@ public:
   {
     // IMPLEMENT ME 5.1b
     // (1) Reset the given bounding box.
-	boundingBox->clearBox;
+	boundingBox->clearBox();
     // (2) Get a box for each primitive, calculate their bounds.
-	for(std::vector<Primitive *>::iterator it = this->primitive.begin(); it != this->primitive.end(); ++it) {
-		//cast to primitive05 and call it's calcBounds(new Box)
+	for(int i = 0; i < primitive.size(); i++) {
+		(Primitive05*)primitive[i];
 	}
     // (3) Extend the values of the empty bounding box to include
     //     the box of each primitive.

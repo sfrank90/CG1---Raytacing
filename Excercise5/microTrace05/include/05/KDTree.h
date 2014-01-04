@@ -42,6 +42,23 @@ struct KDTree
 
       // IMPLEMENT ME 5.1c
       // Traverse tree and return child or true respectively.
+	  /*if (split - ray.org[dim] >= 0) {
+		  //t0 = node.left;
+		  //t1 = node.right;
+	  } else 
+	  {
+		  //t0 = node.right;
+		  //t1 = node.left;
+	  }
+	  if (d >= t1 || d < 0)
+		  //node = t0;
+	  else 
+		if (d <= t0)
+		  //node = t1;
+	  else {
+		  node = first;
+		  tmax = tsplit;
+	  }*/
       // IMPLEMENT ME END
     }
 
@@ -105,8 +122,15 @@ struct KDTree
 
     // IMPLEMENT ME 5.1c
     // (1) Split node.
+	node->split = (dim / 2.f);
     // (2) Iterate over primitives. Add left and right primitives.
+	for(std::vector<Primitive *>::iterator it = prim.begin(); it != prim.end(); ++it) 
+	{
+		// add left and right primitives to specific vector
+	}
     // (3) Build next trees using left and right bounds.
+	node->child[0] = buildTree(lBounds, lPrim, node->dim + 1);
+	node->child[1] = buildTree(rBounds, rPrim, node->dim + 1);
     // IMPLEMENT ME END
 
     return node;
