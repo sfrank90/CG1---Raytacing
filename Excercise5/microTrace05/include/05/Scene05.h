@@ -55,6 +55,7 @@ public:
 
 #if ENABLE_KDTREE == true
     // Build kd-tree.
+	std::cout << "Build Acc. strcuture" << std::endl;
     buildAccelerationStructure();
 #endif
   }

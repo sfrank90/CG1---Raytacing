@@ -113,6 +113,9 @@ struct KDTree
     // Build the kd-tree.
     // (1) Check maximum depth and minimum number of primitives.
     // (2) Create new KDLeafNode if one condition is true.
+	//std::cout << "Prim.size(): " << prim.size() << std::endl;
+	//std::cout << "Depth(): " << depth << std::endl;
+	//std::cin.get();
     if (depth > maxDepth || (int) prim.size() <= minTri)
     {
       return new KDLeafNode(prim);
@@ -151,8 +154,8 @@ struct KDTree
 		}
 	}
     // (3) Build next trees using left and right bounds.
-	node->child[0] = buildTree(lBounds, lPrim, node->dim + 1);
-	node->child[1] = buildTree(rBounds, rPrim, node->dim + 1);
+	node->child[0] = buildTree(lBounds, lPrim, depth + 1); // lol...
+	node->child[1] = buildTree(rBounds, rPrim, depth + 1);
     // IMPLEMENT ME END
 
     return node;
@@ -171,6 +174,7 @@ struct KDTree
     minTri = 3;
     root = NULL;
     root = buildTree(bounds, kdTree, 0);
+	//cout << "Built" << endl;
   }
 
   bool findIntersection(Ray &ray)
