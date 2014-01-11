@@ -15,8 +15,8 @@ public:
 
 	  srand (static_cast <unsigned> (time(0)));
 	  for(int i = 0; i < n; i++) {
-		float x = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) - EPSILON; //first sample point [0,1[
-		float y = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) - EPSILON; // second sample point [0,1[
+		float x = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) - 1e-4; //first sample point [0,1[
+		float y = (static_cast <float> (rand()) / static_cast <float> (RAND_MAX)) - 1e-4; // second sample point [0,1[
 		u[i] = x;
 		v[i] = y;
 		weight[i] = 1.f/n; //? always use average?

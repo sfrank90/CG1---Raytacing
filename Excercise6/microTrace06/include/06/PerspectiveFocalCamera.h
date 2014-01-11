@@ -33,6 +33,12 @@ public:
     // Vary base ray with given pixel offset.
     // IMPLEMENT ME END.
 
+	//quadratic oder circular?
+	ray.org = ray.org + Vec3f(offX*aperture, offY*aperture, 0.f);
+	ray.dir = ray.dir * focal; //scale along direction
+	// 
+	ray.dir = ray.dir - Vec3f(offX*aperture, offY*aperture, 0.f);
+    normalize(ray.dir);
     return true;
   }
 

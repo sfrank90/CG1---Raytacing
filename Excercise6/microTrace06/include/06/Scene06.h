@@ -62,7 +62,7 @@ public:
       this->add(s1);
       this->add(s2);
       this->add(s3);
-      this->camera = new PerspectiveFocalCamera(Vec3f(0, 0, -3), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60, 0.4, (+3 + 5.0) / 2., RESX, RESY);
+      this->camera = new PerspectiveFocalCamera(Vec3f(0, 0, -3), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60, 0.4, /*(+3 + 5.0) / 2.*/ 8.f, RESX, RESY);
     }
 
     // Task 5.1: kd-Tree.
