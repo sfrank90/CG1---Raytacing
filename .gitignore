@@ -23,7 +23,7 @@
 wiki/
 
 # Visual Studio Files
-*/Debug/*
+Debug/
 *.ilk
 *.pdb
 *.sln
