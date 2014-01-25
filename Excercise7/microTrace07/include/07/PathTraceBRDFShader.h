@@ -111,18 +111,23 @@ public:
     //     to the result.
     // IMPLEMENT ME END
 
-	float u1  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-	float u2  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float u1  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float u2  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-	Vec3f v;
+    Vec3f v;
     const float theta = acos(sqrt(1.0f - u1));
     const float phi = 2.0f * M_PI * u2;
     // Calculate new direction as if the y-axis were the normal
-    Vec3f dir(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
+    //Vec3f dir(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
+
+    // du hast y und z vertauscht?!
+    // in der folie steht folgende konvertierung (slide 8, page 42)
+    Vec3f dir(sin(theta) * cos(phi), cos(theta), sin(theta) * sin(phi));
 
     const float a = 1.0f/(1.0f + normal.z);
     const float b = -normal.x*normal.x*a;
 
+    // hier überschreibst du den oben erstellten vector "dir" wieder?!
     dir =   Vec3f(1.0f - normal.x*normal.x*a, b, -normal.x)*dir.x
       +   Vec3f(b, 1.0f - normal.y*normal.y*a, -normal.y)*dir.y 
       +   normal*dir.z;
