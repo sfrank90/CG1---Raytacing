@@ -114,7 +114,7 @@ public:
     float u1  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     float u2  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 
-    Vec3f v;
+    //Vec3f v;
     const float theta = acos(sqrt(1.0f - u1));
     const float phi = 2.0f * M_PI * u2;
     // Calculate new direction as if the y-axis were the normal
@@ -122,23 +122,44 @@ public:
 
     // du hast y und z vertauscht?!
     // in der folie steht folgende konvertierung (slide 8, page 42)
-    Vec3f dir(sin(theta) * cos(phi), cos(theta), sin(theta) * sin(phi));
+	// -> ja du hast recht, duerfte aber keinen unterschied machen...
+    
+	//dir as y-axis
+	Vec3f dir(sin(theta) * cos(phi), cos(theta), sin(theta) * sin(phi));
 
-    const float a = 1.0f/(1.0f + normal.z);
-    const float b = -normal.x*normal.x*a;
+ //   const float a = 1.0f/(1.0f + normal.z);
+ //   const float b = -normal.x*normal.x*a;
 
-    // hier überschreibst du den oben erstellten vector "dir" wieder?!
-    dir =   Vec3f(1.0f - normal.x*normal.x*a, b, -normal.x)*dir.x
-      +   Vec3f(b, 1.0f - normal.y*normal.y*a, -normal.y)*dir.y 
-      +   normal*dir.z;
+ //   // hier überschreibst du den oben erstellten vector "dir" wieder?!
+	//// ja, benutze aber dir auch. Ich muss die "Hemisphere" ja jetzt drehen...
+ //   dir =   Vec3f(1.0f - normal.x*normal.x*a, b, -normal.x)*dir.x
+ //       +   Vec3f(b, 1.0f - normal.y*normal.y*a, -normal.y)*dir.y 
+ //       +   normal*dir.z;
 
-	Ray newRay;
-	newRay.org = ray.org + ray.t*ray.dir;
-	newRay.dir = dir;
-	normalize(newRay.dir);
-	newRay.recursionLevel++;
+	//Ich mach's anders,... statt Drehmatrix lieber mit einem KS
+
+	//create coordiante system
+	Vec3f up = dir;
+	if(fabs(up.x) <= fabs(up.y) && fabs(up.x) <= fabs(up.z)) {
+		up.x = 1.0f;
+	} else if(fabs(up.y) <= fabs(up.x) && fabs(up.y) <= fabs(up.z)) {
+		up.y = 1.0f;
+	} else {
+		up.z = 1.0f;
+	}
+
+	Vec3f x = cross(up,normal); normalize(x);
+	Vec3f z = cross(x, normal); normalize(z);
+
+	//normal is y-axis
+	dir = dir.x * x + dir.y * normal + dir.z * z;
+	normalize(dir);
+
+	Ray newRay(ray.org + ray.t*ray.dir, dir);
+	newRay.recursionLevel = ray.recursionLevel+1;
+
 	float cw = dot(newRay.dir, normal);
-	result_indirect += pdf*cw * scale * scene->rayTrace(newRay);
+	result_indirect += (cw * scale * scene->rayTrace(newRay)) * pdf;
 
     return result_direct + result_indirect;
   }
