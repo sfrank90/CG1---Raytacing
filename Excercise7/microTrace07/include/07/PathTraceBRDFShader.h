@@ -136,7 +136,6 @@ public:
  //       +   Vec3f(b, 1.0f - normal.y*normal.y*a, -normal.y)*dir.y 
  //       +   normal*dir.z;
 
-	//Ich mach's anders,... statt Drehmatrix lieber mit einem KS
 
 	//create coordiante system
 	Vec3f up = dir;
@@ -158,7 +157,7 @@ public:
 	Ray newRay(ray.org + ray.t*ray.dir, dir);
 	newRay.recursionLevel = ray.recursionLevel+1;
 
-	float cw = dot(newRay.dir, normal);
+	float cw = MAX(dot(newRay.dir, normal), 0);
 	result_indirect += (cw * scale * scene->rayTrace(newRay)) * pdf;
 
     return result_direct + result_indirect;
