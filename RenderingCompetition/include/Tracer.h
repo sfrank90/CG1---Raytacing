@@ -32,9 +32,9 @@ protected:
 	std::shared_ptr<Scene> mScene;
 };
 
-class MyTracer : public Tracer {
+class MySpectralTracer : public Tracer {
 public:
-	MyTracer(int w, int h, std::shared_ptr<Scene> s, int pixel_subdivs = 1)
+	MySpectralTracer(int w, int h, std::shared_ptr<Scene> s, int pixel_subdivs = 1)
 	: Tracer(w, h, s), subdivs(pixel_subdivs), mBackground(1.0) { 
 		computeJitters();
 	}
@@ -45,10 +45,11 @@ public:
 	void decrementPixelSubdivs();
 
 	virtual glm::vec3 calculatePixel(int x, int y) const;
-
+	
 	//const Shader *getShader(const geometry::Ray &ray) const;
 protected:
 	void computeJitters();
+	float estimateRadiance(Ray &ray, float wavelength) const;
 
 	int subdivs;
 	std::vector<glm::vec2> jitter;

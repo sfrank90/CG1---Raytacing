@@ -17,8 +17,8 @@
 
 class Triangle : public Object {
 public:
-	Triangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 NA, glm::vec3 NB, glm::vec3 NC, std::shared_ptr<Material> m) 
-			: Object(m), mA(A), mB(B), mC(C), mNA(NA), mNB(NB), mNC(NC)  {}
+	Triangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 NA, glm::vec3 NB, glm::vec3 NC, std::shared_ptr<Material> m,  std::shared_ptr<Light> l = nullptr) 
+			: Object(m, l), mA(A), mB(B), mC(C), mNA(NA), mNB(NB), mNC(NC)  {}
 
 	virtual bool intersect(Ray &ray) {
 		const glm::vec3 edge1 = mB - mA;

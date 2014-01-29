@@ -17,7 +17,7 @@
 
 class Sphere : public Object {
 public:
-	Sphere(const glm::vec3 &center, float radius, std::shared_ptr<Material> m) : Object(m), mCenter(center), mRadius(radius)
+	Sphere(const glm::vec3 &center, float radius, std::shared_ptr<Material> m, std::shared_ptr<Light> l = nullptr) : Object(m,l), mCenter(center), mRadius(radius)
 	{}
 
 	bool intersect(Ray &ray) {

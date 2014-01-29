@@ -14,12 +14,10 @@
 #include <glm/glm.hpp>
 #include "Ray.h"
 
-class Light{
-protected:
+class Light {
 public:
 	Light()  {}
-	virtual bool illuminate(Ray &ray, glm::vec3 &intensity) const = 0;
-	virtual bool emit(Ray &ray, glm::vec3 &phi) const { 
+	virtual float emit(Ray &ray, float wavelength) const { 
 		return false; 
 	}
 };

@@ -17,7 +17,7 @@
 
 class InfinitePlane : public Object {
 public:
-	InfinitePlane(glm::vec3 normal, glm::vec3 origin, std::shared_ptr<Material> m) : Object(m), mNormal(normal), mOrigin(origin) {}
+	InfinitePlane(glm::vec3 normal, glm::vec3 origin, std::shared_ptr<Material> m, std::shared_ptr<Light> l = nullptr) : Object(m,l), mNormal(normal), mOrigin(origin) {}
 
 	bool intersect(Ray &ray) {
 		glm::vec3 diff = mOrigin - ray.origin;
@@ -54,7 +54,7 @@ private:
 
 class Plane : public Object {
 public:
-	Plane(glm::vec3 normal, glm::vec3 origin, float extendX, float extendY, std::shared_ptr<Material> m) : Object(m), mNormal(normal), mExtendX(extendX), mExtendY(extendY), mOrigin(origin) {}
+	Plane(glm::vec3 normal, glm::vec3 origin, float extendX, float extendY, std::shared_ptr<Material> m, std::shared_ptr<Light> l = nullptr) : Object(m,l), mNormal(normal), mExtendX(extendX), mExtendY(extendY), mOrigin(origin) {}
 
 	bool canIntersect() {
 		false;

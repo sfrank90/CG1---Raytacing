@@ -1,6 +1,20 @@
 #ifndef CIE_H
 #define CIE_H
 
+/*
+* *********************************************
+*
+* Rendering Competition - CG1
+*
+* (c) 2014 by Alexander Knueppel & Sven Frank        
+*
+* *********************************************
+*
+* Source: https://github.com/TomCrypto
+*
+*/
+
+
 #include <glm/glm.hpp>
 #include <algorithm>
 
@@ -48,12 +62,12 @@ const ColorSystem /* xRed    yRed    xGreen  yGreen  xBlue  yBlue    White point
 const ColorSystem ColorSystems[6] = {EBUSystem, SMPTESystem, HDTVSystem, Rec709System, NTSCSystem, CIESystem};
 
 /* Converts a spectral radiance distribution to an RGB color. */
-Vector SpectrumToRGB(float spectralRadiance[WAVELENGTHS], ColorSystem colorSystem);
+glm::vec3 SpectrumToRGB(float spectralRadiance[WAVELENGTHS], ColorSystem colorSystem);
 
 /* Returns the luminance of an RGB color according to a given color system. */
-float Luminance(Vector rgb, ColorSystem colorSystem);
+float Luminance(glm::vec3 rgb, ColorSystem colorSystem);
 
 /* Gamma corrects an RGB color according to a given color system. */
-Vector GammaCorrect(Vector rgb, ColorSystem colorSystem);
+glm::vec3 GammaCorrect(glm::vec3 rgb, ColorSystem colorSystem);
 
 #endif

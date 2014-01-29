@@ -71,7 +71,7 @@ struct Ray {
 		hitObject = nullptr;
 	  }
 
-	  glm::vec3 getHitPoint() {
+	  glm::vec3 getHitPoint() const {
 		  return origin + t*dir;
 	  }
 };

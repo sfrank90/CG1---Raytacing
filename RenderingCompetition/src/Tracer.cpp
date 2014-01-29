@@ -7,14 +7,14 @@
 *
 * *********************************************
 *
-* TODO: Hit object and hit material...
-*
 */
 
 #include "../include/Random.h"
 #include "../include/Tracer.h"
+#include "../include/Ray.h"
+#include "../include/cie.h"
 
-void MyTracer::computeJitters() {
+void MySpectralTracer::computeJitters() {
 	RandomFloat rnd;
 
 	float aspect = static_cast<float>(mWidth)/static_cast<float>(mHeight);
@@ -30,21 +30,23 @@ void MyTracer::computeJitters() {
 			jitter[i*subdivs + j] = glm::vec2(rnd() + j, rnd() + i)*step; 
 }
 
-void MyTracer::incrementPixelSubdivs() {
+void MySpectralTracer::incrementPixelSubdivs() {
 	++subdivs;
 	computeJitters();
 }
 
-void MyTracer::decrementPixelSubdivs() {
+void MySpectralTracer::decrementPixelSubdivs() {
 	if(subdivs > 1) {
 		--subdivs;
 		computeJitters();
 	}
 }
 
-glm::vec3 MyTracer::calculatePixel(int x, int y) const {
-  glm::vec3 result(0.0);
+glm::vec3 MySpectralTracer::calculatePixel(int x, int y) const {
+  //glm::vec3 result(0.0);
   glm::vec2 vp_pos = glm::vec2(x, y)*win_to_vp + lower_left;
+
+  float radiance[WAVELENGTHS] = {0.0f};
 
   for(unsigned int i = 0; i < jitter.size(); ++i) {
 	  Ray ray;
@@ -58,17 +60,48 @@ glm::vec3 MyTracer::calculatePixel(int x, int y) const {
 		  mScene->getCamera()->initRay(vp_pos.x + jitter[i].x, vp_pos.y + jitter[i].y, ray);
 	  }
 	  
-	  if(mScene->intersect(ray)) {
-		  //ray.hasHit = true;
-		  //const Shader *s = mScene->getShader(ray);
-		  //if(s)
-	      // result += s->shade(ray);
-		  result += glm::vec3(0.2); //dummy for the moment
-	  } else {
-		  result += mBackground;
+	  for (int w = 0; w < WAVELENGTHS; ++w) {
+			/* Get a radiance sample for this wavelength. */
+			float wavelength = 380.0f + RESOLUTION * w;
+			radiance[w] += estimateRadiance(ray, wavelength);
 	  }
   }
-  return result/static_cast<float>(jitter.size());
+  return SpectrumToRGB(radiance, CIESystem) / (static_cast<float>(jitter.size()) * WAVELENGTHS);
+  //return result/static_cast<float>(jitter.size());
+}
+
+float MySpectralTracer::estimateRadiance(Ray &ray, float wavelength) const {
+    /* Light path loop. */
+	RandomFloat rnd;
+    while (true) {
+		if (!mScene->intersect(ray)) 
+			return 0.0f;
+
+        /* Get the surface normal at the intersection point. */
+		glm::vec3 normal = ray.hitNormal;
+
+        /* If the geometry intersected is a light source, return the emitted light. */
+		if (ray.hitObject->isLight()) {
+            /* Note we assume light sources do not reflect light, this is usually correct. */
+			return ray.hitObject->getLight()->emit(ray, wavelength);
+        }
+
+		glm::vec3 exitant = ray.getHitMaterial()->sample(ray, wavelength);
+		float radiance = ray.getHitMaterial()->brdf(ray, exitant, wavelength, true);
+
+		if (glm::dot(ray.dir,normal) > 0.0f) radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionOutside);
+		else radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionInside);
+
+        /* Russian roulette for unbiased depth. Note this means the loop is guaranteed to terminate, since the
+         * reflectance is defined as being strictly less than 1. */
+        if (rnd() > radiance) return 0.0f;
+
+        /* Go to the next ray bounce. */
+		ray = Ray(ray.getHitPoint(), glm::normalize(exitant));
+    }
+
+    /* No light path formed. */
+    return 0.0f;
 }
 
 //const Shader *RayCaster::getShader(const geometry::Ray &ray) const {

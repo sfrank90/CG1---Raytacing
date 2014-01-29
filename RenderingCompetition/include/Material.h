@@ -10,8 +10,20 @@
 *
 * *********************************************
 */
+#include "Ray.h"
+
+class Material {
+public:
+	//Wavelength dependend!
+	float mExtinctionInside, mExtinctionOutside; //for imaginary ior
+	virtual glm::vec3 sample(const Ray &ray, float wavelength) {
+		return glm::vec3(0.0f);
+	}
+	virtual float brdf(const Ray &ray, const glm::vec3 &exitant, float wavelength, bool sampled) {
+		return 0.f;
+	}
 
 
-struct Material {};
+};
 
 #endif
