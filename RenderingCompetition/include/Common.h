@@ -1,6 +1,15 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__   
 
+/*
+* *********************************************
+*
+* Rendering Competition - CG1
+*
+* (c) 2014 by Alexander Knueppel & Sven Frank        
+*
+* *********************************************
+*/
 
 #if defined(__WIN32__) || defined(_MSC_VER)
 #   define PLATFORM_WINDOWS
