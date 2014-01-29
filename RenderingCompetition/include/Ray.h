@@ -34,7 +34,6 @@ struct Ray {
 	  //characteristics
 	  glm::vec3 origin;
 	  glm::vec3 dir;
-	  glm::vec3 hitPos;
 	  glm::vec3 hitNormal;
 
 	  //status

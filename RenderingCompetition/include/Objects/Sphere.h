@@ -2,15 +2,16 @@
 #define __SPHERE_H__
 
 /*
-* ****************************************
+* *********************************************
 *
-* Harmony4D - Praktische Aspekte der Informatik WS1314
+* Rendering Competition - CG1
 *
-* (c) 2013 by Alexander Knueppel         
+* (c) 2014 by Alexander Knueppel & Sven Frank        
 *
-* ****************************************
+* *********************************************
 *
 */
+
 #include "../Common.h"
 #include "../Object.h"
 
@@ -47,7 +48,7 @@ public:
 			return false;
 		}
 		ray.t = dist;
-		ray.hitObject = this;
+		ray.hitObject = std::shared_ptr<Object>(this);
 		ray.hitNormal = glm::normalize(ray.origin + ray.t * ray.dir - mCenter);
 		ray.hasHit = true;
 		
