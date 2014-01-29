@@ -45,6 +45,7 @@
 
 namespace constants {
 	static const double pi          = 3.14159265358979323846264338327950288;
+	static const double two_pi      = pi*2.0;
 	static const double half_pi     = pi/2.0;
 	static const double quarter_pi  = pi/2.0;
 	static const double inv_pi      = 1.0/pi;
