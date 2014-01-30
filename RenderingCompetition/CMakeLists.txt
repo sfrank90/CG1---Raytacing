@@ -6,7 +6,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.0)
 
 # set the compiler flags
 SET(CMAKE_BUILD_TYPE debug)
-SET(CMAKE_CXX_FLAGS "-Wall -std=c++11")
+SET(CMAKE_CXX_FLAGS "-Wall -O3 -std=c++11")
 
 # Add path to additional packages (makes it easier to include common libraries)
 set(CMAKE_MODULE_PATH ${Reco_SOURCE_DIR}/CMakeModules/)
@@ -33,6 +33,10 @@ INCLUDE_DIRECTORIES(
 SET(Reco_SRC
   src/Image.cpp
   src/main.cpp
+  src/cie.cpp
+  src/Camera.cpp
+  src/Tracer.cpp
+  src/Object.cpp
 )
 
 ADD_EXECUTABLE(Reco ${Reco_SRC})
