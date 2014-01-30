@@ -13,6 +13,8 @@
 #include "../include/Tracer.h"
 #include "../include/Ray.h"
 #include "../include/cie.h"
+#include "../include/Light.h"
+#include "../include/Material.h"
 
 void MySpectralTracer::computeJitters() {
 	RandomFloat rnd;
@@ -59,24 +61,29 @@ glm::vec3 MySpectralTracer::calculatePixel(int x, int y) const {
 	  else {
 		  mScene->getCamera()->initRay(vp_pos.x + jitter[i].x, vp_pos.y + jitter[i].y, ray);
 	  }
-	  
+	  //if nothing is hit just go to the next sample
+	  if (!mScene->intersect(ray)) 
+		  continue;
+
 	  for (int w = 0; w < WAVELENGTHS; ++w) {
 			/* Get a radiance sample for this wavelength. */
 			float wavelength = 380.0f + RESOLUTION * w;
 			radiance[w] += estimateRadiance(ray, wavelength);
 	  }
   }
-  return SpectrumToRGB(radiance, CIESystem) / (static_cast<float>(jitter.size()) * WAVELENGTHS);
-  //return result/static_cast<float>(jitter.size());
+  //using CIESystem
+  glm::vec3 result = SpectrumToRGB(radiance, CIESystem) / (static_cast<float>(jitter.size()) * WAVELENGTHS);
+  //no radiance here...
+  if(result == glm::vec3(0.f))
+	  return mBackground;
+
+  return result;
 }
 
 float MySpectralTracer::estimateRadiance(Ray &ray, float wavelength) const {
     /* Light path loop. */
 	RandomFloat rnd;
     while (true) {
-		if (!mScene->intersect(ray)) 
-			return 0.0f;
-
         /* Get the surface normal at the intersection point. */
 		glm::vec3 normal = ray.hitNormal;
 
@@ -89,12 +96,15 @@ float MySpectralTracer::estimateRadiance(Ray &ray, float wavelength) const {
 		glm::vec3 exitant = ray.getHitMaterial()->sample(ray, wavelength);
 		float radiance = ray.getHitMaterial()->brdf(ray, exitant, wavelength, true);
 
-		if (glm::dot(ray.dir,normal) > 0.0f) radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionOutside);
-		else radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionInside);
+		if (glm::dot(ray.dir,normal) > 0.0f) 
+			radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionOutside);
+		else 
+			radiance *= exp(-ray.t * ray.getHitMaterial()->mExtinctionInside);
 
         /* Russian roulette for unbiased depth. Note this means the loop is guaranteed to terminate, since the
          * reflectance is defined as being strictly less than 1. */
-        if (rnd() > radiance) return 0.0f;
+        if (rnd() > radiance) 
+			return 0.0f;
 
         /* Go to the next ray bounce. */
 		ray = Ray(ray.getHitPoint(), glm::normalize(exitant));

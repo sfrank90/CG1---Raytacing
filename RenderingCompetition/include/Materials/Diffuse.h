@@ -19,7 +19,7 @@ protected:
 	std::shared_ptr<Distribution> mDistribution;
 public:
 	Diffuse(std::shared_ptr<Distribution> d) : mDistribution(d) {}
-
+	// Importance sampling
 	virtual glm::vec3 sample(const Ray &ray, float wavelength) {
 		if(!ray.hasHit)
 			return glm::vec3(0.f);
@@ -45,17 +45,20 @@ public:
 		/* Get the unit vector. */
 		glm::vec3 dir = glm::vec3(r * cosf(theta), sqrtf(1.0f - u1), r * sinf(theta));
 
-		/* Rotate the vector with the normal. */
-		   /* If the normal vector is already the world space upwards (or downwards) vector, don't do anything. */
+		glm::vec3 up = normal;
+		if(fabs(up.x) <= fabs(up.y) && fabs(up.x) <= fabs(up.z)) {
+			up.x = 1.0f;
+		} else if(fabs(up.y) <= fabs(up.x) && fabs(up.y) <= fabs(up.z)) {
+			up.y = 1.0f;
+		} else {
+			up.z = 1.0f;
+		}
 
-        /* Build the orthonormal basis of the normal vector. */
-        glm::vec3 x = glm::normalize(glm::cross(normal,glm::vec3(0,1,0)));
+        glm::vec3 x = glm::normalize(glm::cross(normal,up));
         glm::vec3 z = glm::normalize(glm::cross(normal,x));
 
         /* Transform the unit vector to this basis. */
         return x * dir.x + normal * dir.y + z * dir.z;
-
-		return rotate(direction, normal);
 	}
 	virtual float brdf(const Ray &ray, const glm::vec3 &exitant, float wavelength, bool sampled) {
 	  /* If the exitant ray was importance-sampled... */

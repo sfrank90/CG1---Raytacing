@@ -16,6 +16,7 @@
 
 #include "Common.h"
 #include "Object.h"
+#include <memory>
 #include <glm/glm.hpp>
 
 struct Ray {
@@ -64,8 +65,8 @@ struct Ray {
 		isInside = false;
 		hitDiffuse = false;
 		ior = 1.0f;
-		tmin = constants::epsilon;
-		tmax = constants::infinity;
+		tmin = (float)constants::epsilon;
+		tmax = (float)constants::infinity;
 		t = constants::epsilon;
 		recursiveDepth = 0;
 		hitObject = nullptr;

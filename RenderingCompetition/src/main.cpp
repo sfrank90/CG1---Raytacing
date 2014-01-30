@@ -8,28 +8,24 @@
 * *********************************************
 */
 
-#include "../include/Image.h"
-#include "../include/Random.h"
+#include "../include/Scene.h"
+#include "../include/Renderer.h"
+#include "../include/Camera.h"
 #include <iostream>
 
 const int iWidth = 640;
 const int iHeight = 480;
+const int iSamples = 1;
 
 int main(int argc, char* argv[]) {
-	//Image
-	Image img(iWidth, iHeight); 
-	//Random number generator (numbers are in the range [0,1])
-	RandomFloat rnd;
+	std::shared_ptr<Camera> camera(new PerspectiveCamera(glm::vec3(0.f,0.f,1.f), glm::vec3(0.f), glm::vec3(0.f,1.f,0.f), 45.f, iWidth, iHeight));
+	std::shared_ptr<Scene> scene(new Scene());
+	scene->setCamera(camera);
+	//scene->buildAccelerationStructure();
 
-	//Write random colors to ppm
-	for (int y = 0; y < iHeight; y++) {
-		for (int x = 0; x < iWidth; x++) {
-			//three random colors for each channel
-			img[y][x] = glm::vec3(rnd(),rnd(),rnd()); 
-		}
-		printf("Progress: %6.2f %% rendered... \r", y*iWidth*100.f / (iWidth*iHeight));
-	}
-	img.writePPM("results/result.ppm"); 
+	MySpectralRenderer renderer(iWidth, iHeight, iSamples, scene);
+
+	renderer.render("results/firsttest.ppm");
 	
 	return 0;
 }

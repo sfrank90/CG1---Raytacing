@@ -21,7 +21,7 @@
 class  Tracer {
 public:
 	Tracer(int w, int h, std::shared_ptr<Scene> s) : mWidth(w), mHeight(h), mScene(s) {}
-	~Tracer() {}
+	virtual ~Tracer() {}
 	
 	virtual glm::vec3 calculatePixel(int x, int y) const = 0;
 
@@ -35,9 +35,10 @@ protected:
 class MySpectralTracer : public Tracer {
 public:
 	MySpectralTracer(int w, int h, std::shared_ptr<Scene> s, int pixel_subdivs = 1)
-	: Tracer(w, h, s), subdivs(pixel_subdivs), mBackground(1.0) { 
+	: Tracer(w, h, s), subdivs(pixel_subdivs), mBackground(0.0) { 
 		computeJitters();
 	}
+	virtual ~MySpectralTracer() {}
 
 	void setBackground(const glm::vec3& color) { mBackground = color; }
 
@@ -57,6 +58,17 @@ protected:
 	glm::vec2 lower_left;
 	glm::vec2 step;
 	glm::vec3 mBackground;
+};
+
+class MyPhotonTracer : public MySpectralTracer {
+public:
+	MyPhotonTracer(int w, int h, std::shared_ptr<Scene> s, int pixel_subdivs = 1)
+	: MySpectralTracer(w, h, s, pixel_subdivs) { }
+	virtual ~MyPhotonTracer() {}
+
+	//virtual glm::vec3 calculatePixel(int x, int y) const;
+	//void buildMaps();
+protected:
 };
 
 #endif

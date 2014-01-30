@@ -11,7 +11,7 @@
 *
 */
 
-
+#include "../include/AABB.h"
 #include "../include/Object.h"
 
 void Object::computeBSphere(glm::vec3& center, float& radius) const {

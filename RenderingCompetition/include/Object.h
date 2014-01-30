@@ -15,10 +15,11 @@
 #include <memory> 
 #include <vector>
 #include "Common.h"
-#include "Ray.h"
-#include "AABB.h"
-#include "Material.h"
-#include "Light.h"
+
+class Material;
+class Light;
+struct Ray;
+struct AABB;
 class Object {
 protected:
 	std::shared_ptr<Material> mMaterial;
