@@ -21,30 +21,71 @@
 
 class Renderer {
 protected:
-	std::shared_ptr<Scene> mScene;
+	Scene* mScene;
 	int mWidth, mHeight, mSamplesPerPixel;
 	Image mImage;
 public:
-	Renderer(int w, int h, int spp, std::shared_ptr<Scene> s) : mWidth(w), mHeight(h), mSamplesPerPixel(spp), mScene(s), mImage(w,h) {}
+	Renderer(int w, int h, int spp, Scene* s) : mWidth(w), mHeight(h), mSamplesPerPixel(spp), mScene(s), mImage(w,h) {}
 	virtual void render(const std::string &filename) = 0;
 };
 
-class MySpectralRenderer : public Renderer {
+class MySimpleRenderer : public Renderer {
 protected:
-	std::shared_ptr<MySpectralTracer> mTracer;
+	MySimpleTracer *mTracer;
+	int mMaxShotsPerLight;
 public:
-	MySpectralRenderer(int w, int h, int spp, std::shared_ptr<Scene> s) : Renderer(w,h,spp,s), mTracer(new MySpectralTracer(w,h,s,spp)) {
-		mTracer->setBackground(glm::vec3(0.1f,0.3f,0.5f));
+	MySimpleRenderer(int w, int h, int spp, Scene* s, int numBounces=5, bool globalIllumination=false, int globalPhotons=10000, int causticPhotons=10000, int volumePhotons=10000, int maxShotsPerLight=10000) 
+		: Renderer(w,h,spp,s), mTracer(new MySimpleTracer(w,h,s,spp, numBounces, globalIllumination, globalPhotons, causticPhotons, volumePhotons)), mMaxShotsPerLight(maxShotsPerLight) {
+		mTracer->setBackground(glm::vec3(0.f));
 	}
 	void render(const std::string &filename) {
+		float exposure = -3.f;
+		if(mTracer->isGlobalIllumination())
+			mTracer->buildMaps(mMaxShotsPerLight);
 		for (int y = 0; y < mHeight; y++) {
 			for (int x = 0; x < mWidth; x++) {
-				mImage[y][x] = mTracer->calculatePixel(x,y); 
+				glm::vec3 color;
+				color = mTracer->calculatePixel(x,y);
+				toneMapping(color, exposure);
+				gammaCorrect(color);
+				mImage[y][x] = glm::clamp(color, 0.f, 1.f);          
 			}
 			printf("Progress: %6.2f %% rendered... \r", y*mWidth*100.f / (mWidth*mHeight));
 		}
 		mImage.writePPM(filename.c_str()); 
 	}
+
+	void toneMapping(glm::vec3 &color,  float exposure) {
+		for(int i=0;i<3;i++) {
+			color[i] = 1.0 - exp (color[i] * exposure);
+		}
+	}
+    void gammaCorrect (glm::vec3 &color) {
+		for(int i=0;i<3;i++) {
+			if (color[i] <= 0.0031308f)
+				color[i] *= 12.92f;
+			else
+				color[i] = 1.055f * pow (color[i], 0.4166667f) - 0.055f;
+		}
+	}
 };
+
+//class MySpectralRenderer : public Renderer {
+//protected:
+//	MySpectralTracer *mTracer;
+//public:
+//	MySpectralRenderer(int w, int h, int spp, Scene* s) : Renderer(w,h,spp,s), mTracer(new MySpectralTracer(w,h,s,spp)) {
+//		mTracer->setBackground(glm::vec3(0.1f,0.3f,0.5f));
+//	}
+//	void render(const std::string &filename) {
+//		for (int y = 0; y < mHeight; y++) {
+//			for (int x = 0; x < mWidth; x++) {
+//				mImage[y][x] = mTracer->calculatePixel(x,y); 
+//			}
+//			printf("Progress: %6.2f %% rendered... \r", y*mWidth*100.f / (mWidth*mHeight));
+//		}
+//		mImage.writePPM(filename.c_str()); 
+//	}
+//};
 
 #endif 

@@ -16,11 +16,11 @@
 
 class Diffuse : public Material {
 protected:
-	std::shared_ptr<Distribution> mDistribution;
+	Distribution* mDistribution;
 public:
-	Diffuse(std::shared_ptr<Distribution> d) : mDistribution(d) {}
+	Diffuse(Distribution* d) : mDistribution(d) {}
 	// Importance sampling
-	virtual glm::vec3 sample(const Ray &ray, float wavelength) {
+	virtual glm::vec3 sample(const Ray &ray, float wavelength) const {
 		if(!ray.hasHit)
 			return glm::vec3(0.f);
 
@@ -31,7 +31,7 @@ public:
 			normal = -normal;
 
 		/* Move the origin outside the surface slightly. */
-		glm::vec3 hitp = ray.getHitPoint() + ray.hitNormal*(float)constants::epsilon;
+
 		RandomFloat rnd;
 
 		/* Get two random numbers. */
@@ -39,13 +39,13 @@ public:
 		float u2 = rnd();
 
 		/* Compute a cosine-weighted vector. */
-		float theta = constants::two_pi * u2;
-		float r = sqrtf(u1);
+		const float theta = acos(sqrt(1.0f - u1));
+		const float phi = constants::two_pi * u2;
 
 		/* Get the unit vector. */
-		glm::vec3 dir = glm::vec3(r * cosf(theta), sqrtf(1.0f - u1), r * sinf(theta));
+		glm::vec3 dir(sin(theta) * cos(phi), cos(theta), sin(theta) * sin(phi));
 
-		glm::vec3 up = normal;
+		glm::vec3 up = dir;
 		if(fabs(up.x) <= fabs(up.y) && fabs(up.x) <= fabs(up.z)) {
 			up.x = 1.0f;
 		} else if(fabs(up.y) <= fabs(up.x) && fabs(up.y) <= fabs(up.z)) {
@@ -54,13 +54,13 @@ public:
 			up.z = 1.0f;
 		}
 
-        glm::vec3 x = glm::normalize(glm::cross(normal,up));
-        glm::vec3 z = glm::normalize(glm::cross(normal,x));
+        glm::vec3 x = glm::normalize(glm::cross(up, normal));
+        glm::vec3 z = glm::normalize(glm::cross(x, normal));
 
         /* Transform the unit vector to this basis. */
-        return x * dir.x + normal * dir.y + z * dir.z;
+        return glm::normalize(x * dir.x + normal * dir.y + z * dir.z);
 	}
-	virtual float brdf(const Ray &ray, const glm::vec3 &exitant, float wavelength, bool sampled) {
+	virtual float brdf(const Ray &ray, const glm::vec3 &exitant, float wavelength, bool sampled) const {
 	  /* If the exitant ray was importance-sampled... */
 		if (sampled) {
 			/* This is just a constant by definition, but we are using a cosine-weighted distribution so we divide

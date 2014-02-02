@@ -24,7 +24,7 @@ class BlackBodyDistribution : public Distribution {
 private:
 	float mTemperature; // [K] (kelvin)
 public:
-	BlackBodyDistribution(float v) : mTemperature(v) {}
+	BlackBodyDistribution(float temperature) : mTemperature(temperature) {}
 	float intensity(float wavelength) {
 		wavelength *= 1e-9f; //to meters
 
@@ -47,7 +47,7 @@ class ConstantDistribution : public Distribution {
 private:
 	float mConstant; 
 public:
-	ConstantDistribution(float v) : mConstant(v) {}
+	ConstantDistribution(float wavelength) : mConstant(wavelength) {}
 	float intensity(float wavelength) {
 		return mConstant;
 	}
@@ -59,7 +59,7 @@ class MonochromaticDistribution : public Distribution {
 private:
 	float mPeak; 
 public:
-	MonochromaticDistribution(float v) : mPeak(v) {}
+	MonochromaticDistribution(float wavelength) : mPeak(wavelength) {}
 	float intensity(float wavelength) {
 		return glm::exp(-glm::pow(wavelength - mPeak, 2.0f) * 0.002f);
 	}

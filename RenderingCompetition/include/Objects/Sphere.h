@@ -17,10 +17,11 @@
 
 class Sphere : public Object {
 public:
-	Sphere(const glm::vec3 &center, float radius, std::shared_ptr<Material> m, std::shared_ptr<Light> l = nullptr) : Object(m,l), mCenter(center), mRadius(radius)
+	Sphere(const glm::vec3 &center, float radius, Material *m, bool l=false) : Object(m,l), mCenter(center), mRadius(radius)
 	{}
 
 	bool intersect(Ray &ray) {
+		
 		float phi;
 		glm::vec3 phit;
 		glm::vec3 new_origin = ray.origin-mCenter;
@@ -39,7 +40,7 @@ public:
 		float dist = (-B - root) / (2 * A); // try t0.
 		if (dist > ray.t)
 		  return false;
-
+		
 		// Test if t is closer than the current ray.t and if t is not zero.
 		// If so, set the new ray.t and return true
 		if (dist < constants::epsilon) { // i.e. t0 behind camera.
@@ -48,7 +49,7 @@ public:
 			return false;
 		}
 		ray.t = dist;
-		ray.hitObject = std::shared_ptr<Object>(this);
+		ray.hitObject = this;
 		ray.hitNormal = glm::normalize(ray.origin + ray.t * ray.dir - mCenter);
 		ray.hasHit = true;
 		

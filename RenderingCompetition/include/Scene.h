@@ -23,15 +23,15 @@ public:
 
 	//const Shader *getShader(const geometry::Ray &r) const;
 
-	//const std::vector<LightSource*> &getLights() const    { return mLights; }
+	const std::vector<Light*> &getLights() const    { return mLights; }
 	//const std::vector<Shader*> &getShaders()  const       { return mShaders; }
-	std::vector<std::shared_ptr<Object> > getObjects() const { return mObjects; }
+	const std::vector<Object*> &getObjects() const { return mObjects; }
 
-	//void addLight(LightSource* l)     { mLights.push_back(l); }
+	void addLight(Light* l)     { mLights.push_back(l); }
 	//void addShader(Shader* s)         { mShaders.push_back(s); }
-	void addShape(std::shared_ptr<Object> o) { mObjects.push_back(o); }
+	void addObject(Object *o) { mObjects.push_back(o); }
 
-	void setCamera(std::shared_ptr<Camera> c) { mCamera = c; }
+	void setCamera(Camera *c) { mCamera = c; }
 
 	bool intersect(Ray& r) const {
 		if (mAccelerated)
@@ -44,7 +44,7 @@ public:
 		return res;
 	}
 
-	std::shared_ptr<Camera> getCamera() { return mCamera; }
+	const Camera *getCamera() const { return mCamera; }
 
 	bool shadows() { return mEnableShadows; }
     bool dof()     {  return mDOF; }
@@ -62,10 +62,10 @@ public:
 	}
 private:
 	//std::vector<Shader *>          mShaders;
-	//std::vector<LightSource *>     mLights;
-	std::vector<std::shared_ptr<Object> > mObjects;
+	std::vector<Light*>  mLights;
+	std::vector<Object*> mObjects;
 
-	std::shared_ptr<Camera> mCamera;
+	Camera *mCamera;
 
 	//status flags
 	bool    mEnableShadows;

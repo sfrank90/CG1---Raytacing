@@ -1,5 +1,5 @@
-#ifndef __LIGHT_H__
-#define __LIGHT_H__
+#ifndef __QUADLIGHT_H__
+#define __QUADLIGHT_H__
 
 /*
 * *********************************************
@@ -11,19 +11,8 @@
 * *********************************************
 */
 
-#include <glm/glm.hpp>
-#include "Ray.h"
-
-class Light{
-protected:
-public:
-	Light()  {}
-	virtual bool illuminate(Ray &ray, glm::vec3 &intensity) const = 0;
-	virtual bool emit(Ray &ray, glm::vec3 &phi) const { 
-		return false; 
-	}
-};
-
+//#include <glm/glm.hpp>
+//
 //class H4D_API PointLight : public LightSource {
 //private:
 //	glm::vec3 mPosition;  // origin

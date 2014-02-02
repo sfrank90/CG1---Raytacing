@@ -18,13 +18,13 @@
 #include "AABB.h"
 
 struct KdTreeNode {
-	KdTreeNode (std::vector<std::shared_ptr<Object> > &objects) : mSplitPlane(0.0), mDimension(0), mLeftChild(nullptr), mRightChild(nullptr) {
+	KdTreeNode (std::vector<Object*> &objects) : mSplitPlane(0.0), mDimension(0), mLeftChild(nullptr), mRightChild(nullptr) {
 		mObjects = objects;
 
 	}
 
     ~KdTreeNode () { }
-	std::vector<std::shared_ptr<Object> > mObjects;    
+	std::vector<Object*> mObjects;    
 	std::uint32_t mDimension;
     float         mSplitPlane;    
 	KdTreeNode   *mLeftChild, *mRightChild;
@@ -67,7 +67,7 @@ struct KdTreeNode {
 
 class KdTree {
 public:
-        KdTree(AABB bb, std::vector<std::shared_ptr<Object> > objects, std::uint32_t maxObjects = 4, std::uint32_t maxDepth = 20) : mBB(bb), mMaxObjects(maxObjects), mMaxDepth(maxDepth) {
+        KdTree(AABB bb, std::vector<Object*> objects, std::uint32_t maxObjects = 4, std::uint32_t maxDepth = 20) : mBB(bb), mMaxObjects(maxObjects), mMaxDepth(maxDepth) {
 			mRoot = nullptr;
 			mRoot = buildTree(mBB, objects, 0);
 		}
@@ -95,7 +95,7 @@ public:
 			return false;
 		}
 private:
-	  KdTreeNode* buildTree (AABB bb, std::vector<std::shared_ptr<Object> > objects, std::uint32_t depth) {
+	  KdTreeNode* buildTree (AABB bb, std::vector<Object*> objects, std::uint32_t depth) {
 
 		  if (depth > mMaxDepth || (int) objects.size() <= mMaxObjects) 
 			  return new KdTreeNode(objects);
@@ -113,15 +113,15 @@ private:
 			AABB lBounds = bb;
 			AABB rBounds = bb;
 
-			std::vector<std::shared_ptr<Object> > lPrim;
-			std::vector<std::shared_ptr<Object> > rPrim;
+			std::vector<Object*> lPrim;
+			std::vector<Object*> rPrim;
 
 			node->mSplitPlane = (bb.p_max[dim]+bb.p_min[dim]) / 2.0f;
 	
 			lBounds.p_max[dim] = node->mSplitPlane;
 			rBounds.p_min[dim] = node->mSplitPlane;
 
-			for(std::vector<std::shared_ptr<Object> >::iterator it = objects.begin(); it != objects.end(); ++it) 
+			for(std::vector<Object*>::iterator it = objects.begin(); it != objects.end(); ++it) 
 			{
 				// add left and right primitives to specific vector
 				

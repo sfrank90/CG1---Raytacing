@@ -17,7 +17,7 @@
 
 class Triangle : public Object {
 public:
-	Triangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 NA, glm::vec3 NB, glm::vec3 NC, std::shared_ptr<Material> m,  std::shared_ptr<Light> l = nullptr) 
+	Triangle(glm::vec3 A, glm::vec3 B, glm::vec3 C, glm::vec3 NA, glm::vec3 NB, glm::vec3 NC, Material *m,  bool l=false) 
 			: Object(m, l), mA(A), mB(B), mC(C), mNA(NA), mNB(NB), mNC(NC)  {}
 
 	virtual bool intersect(Ray &ray) {
@@ -27,7 +27,7 @@ public:
 		const glm::vec3 pvec = glm::cross(ray.dir, edge2);
 
 		const float det = glm::dot(edge1, pvec);
-		if (fabs(det) < constants::epsilon)
+		if (fabs(det) < 1E-8)
 			return false;
 
 
@@ -50,11 +50,11 @@ public:
 
 		float f = glm::dot(edge2, qvec);
 		f *= inv_det;
-		if (ray.t <= f || f < constants::epsilon)
+		if (ray.t <= f || f < 1E-8)
 			return false;
 
 		ray.t = f;
-		ray.hitObject = std::shared_ptr<Object>(this);
+		ray.hitObject = this;
 		ray.hasHit = true;
 		ray.u = lambda;
 		ray.v = mue;

@@ -22,14 +22,14 @@ struct Ray;
 struct AABB;
 class Object {
 protected:
-	std::shared_ptr<Material> mMaterial;
-	std::shared_ptr<Light> mLight;
+	Material* mMaterial;
+	bool mLight;
 public:
-	Object(std::shared_ptr<Material> m, std::shared_ptr<Light> l = nullptr) : mMaterial(m), mLight(l) {
+	Object(Material* m, bool l=false) : mMaterial(m), mLight(l) {
 	}
 	virtual ~Object() {}
 	
-	virtual void refine(std::vector<std::shared_ptr<Object> > &refined) const {
+	virtual void refine(std::vector<Object*> &refined) const {
 	}
 	
 	virtual bool intersect(Ray &ray) {
@@ -38,16 +38,12 @@ public:
 	virtual bool canIntersect() const {
 		return true;
 	}
-	std::shared_ptr<Material> getMaterial() const { 
+	const Material *getMaterial() const { 
 		return mMaterial; 
 	}
 
-	std::shared_ptr<Light> getLight() const { 
-		return mLight; 
-	}
-
 	bool isLight() {
-		return (mLight != nullptr);
+		return mLight;
 	}
 
 

@@ -27,10 +27,12 @@ struct Ray {
 		  const glm::vec3& _dir, 
 		  float min_dist = constants::epsilon, 
 		  float max_dist = constants::infinity, 
-		  float _t = constants::epsilon, 
+		  float _t = constants::infinity, 
 		  int depth = 0) 
 		  : origin(_origin), dir(_dir), hasHit(false), isInside(false), hitDiffuse(false), ior(1.0f), tmin(min_dist), t(_t), tmax(max_dist), recursiveDepth(depth) 
-	  { }
+	  { 
+		  hitObject = nullptr;
+	  }
 
 	  //characteristics
 	  glm::vec3 origin;
@@ -51,9 +53,9 @@ struct Ray {
 	  int recursiveDepth;       // Current recursion depth (path length)
 
 	  //TODO
-	  std::shared_ptr<Object> hitObject;
+	  Object* hitObject;
 
-	  std::shared_ptr<Material> getHitMaterial() const {
+	  const Material *getHitMaterial() const {
 		if(hitObject != nullptr) {
 			return hitObject->getMaterial();
 		}
@@ -67,7 +69,7 @@ struct Ray {
 		ior = 1.0f;
 		tmin = (float)constants::epsilon;
 		tmax = (float)constants::infinity;
-		t = constants::epsilon;
+		t = constants::infinity;
 		recursiveDepth = 0;
 		hitObject = nullptr;
 	  }
