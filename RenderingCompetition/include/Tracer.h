@@ -69,7 +69,7 @@ public:
 			}
 		}
 
-		mGlobal.scale_photon_power(1.f/((float)lights.size()*maxShotsPerLight));
+		mGlobal.scale_photon_power(1.f/((float)mGlobal.mapped_photons()));
 		mCaustics.scale_photon_power(1.f/((float)lights.size()*maxShotsPerLight));
 		mVolume.scale_photon_power(1.f/((float)lights.size()*maxShotsPerLight));
 		mGlobal.balance();
@@ -205,7 +205,8 @@ protected:
 					}
 				} else {
 					if(true) {
-						mGlobal.store(&energy[0], &hitpoint[0], &r.dir[0]);
+						glm::vec3 d = -r.dir;
+						mGlobal.store(&energy[0], &hitpoint[0], &d[0]);
 					}
 				}
 				//hemisphere cw sampling
@@ -287,7 +288,7 @@ protected:
 		glm::vec3 color(0.f);
 		if(mScene->intersect(ray)) {
 			if(ray.hitObject->isLight())
-				return glm::vec3(0.9f);
+				return glm::vec3(1.f);
 
 			if(ray.recursiveDepth == 0) //add ambient color
 				color = ray.getHitMaterial()->mAmbient;
@@ -296,13 +297,13 @@ protected:
 			if (glm::dot (diffuseColor, diffuseColor) > 0.0001f) {
                 color += diffuse (diffuseColor,ray);
             }
-		                                // Specular
+		    // Specular
             glm::vec3 specularColor = multiplier * ray.getHitMaterial()->mSpecular;
 			if (glm::dot (specularColor, specularColor) > 0.0001f) {
                 color += specular(specularColor,ray);
             }
 
-                                        // Transmissive.
+            // Transmissive.
 			glm::vec3 transmissiveColor = multiplier * ray.getHitMaterial()->mTransmission;
 			if (glm::dot (transmissiveColor, transmissiveColor) > 0.0001f) {
                 color += transmission(transmissiveColor,ray);
@@ -351,7 +352,7 @@ protected:
 	}
 
 	glm::vec3 diffuse(glm::vec3 diffuseColor, Ray ray) const {
-		glm::vec3 result;
+		glm::vec3 result(0.f);
 		float shadowFactor = 1.f;
 		for (size_t i = 0; i < mScene->getLights().size(); ++i)  {
 			Ray shadow;
@@ -367,9 +368,9 @@ protected:
       
 			result += f * intensity * glm::max(glm::dot(ray.hitNormal, shadow.dir), 0.0f);
 		}
-		result *= shadowFactor;
+		//result *= shadowFactor;
 		if(mGlobalIllumination) {
-			result += (globalIradiance(ray,3.f, 350)+causticIradiance(ray,2.f, 350));
+			result += (globalIradiance(ray,5.f, 750)+causticIradiance(ray,2.f, 350));
 		}
 		return result;
 	}

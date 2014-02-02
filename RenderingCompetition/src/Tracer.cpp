@@ -63,8 +63,7 @@ glm::vec3 MySimpleTracer::calculatePixel(int x, int y) const {
 	  }
 
 	  // ====> logic goes here
-	  //result += globalIiradiance(ray, 0.7f, 20);//
-	  result += traceRay(ray, glm::vec3(1.f));
+	  result += traceRay(ray, glm::vec3(1.f));// + (globalIradiance(ray,3.f, 350)+causticIradiance(ray,2.f, 350));
   }
 
   return result / (float)jitter.size();

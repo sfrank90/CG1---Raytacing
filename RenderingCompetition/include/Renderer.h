@@ -19,6 +19,8 @@
 #include "Tracer.h"
 #include <glm/glm.hpp>
 
+#include <omp.h>
+
 class Renderer {
 protected:
 	Scene* mScene;
@@ -39,18 +41,28 @@ public:
 		mTracer->setBackground(glm::vec3(0.f));
 	}
 	void render(const std::string &filename) {
-		float exposure = -3.f;
+		float exposure = -1.f;
 		if(mTracer->isGlobalIllumination())
 			mTracer->buildMaps(mMaxShotsPerLight);
+		int pixeldone = 0;
+
+		#pragma omp parallel for collapse(2)
 		for (int y = 0; y < mHeight; y++) {
+			//#pragma omp parallel for collapse(2)
 			for (int x = 0; x < mWidth; x++) {
 				glm::vec3 color;
 				color = mTracer->calculatePixel(x,y);
 				toneMapping(color, exposure);
 				gammaCorrect(color);
-				mImage[y][x] = glm::clamp(color, 0.f, 1.f);          
+				mImage[y][x] = glm::clamp(color, 0.f, 1.f);    
+				#pragma omp critical 
+				{
+					pixeldone++;
+					//printf("Pixel: %d %% \r", (pixeldone));
+					printf("Progress: %6.2f %% rendered... \r", ((float)pixeldone / (mWidth*mHeight))*100.f);
+				}
 			}
-			printf("Progress: %6.2f %% rendered... \r", y*mWidth*100.f / (mWidth*mHeight));
+			//printf("Progress: %6.2f %% rendered... \r", y*mWidth*100.f / (mWidth*mHeight));
 		}
 		mImage.writePPM(filename.c_str()); 
 	}

@@ -26,7 +26,7 @@
 
 const int iWidth = 640;
 const int iHeight = 480;
-const int iSamples = 2;
+const int iSamples = 6;
 
 void createCornelBox(Scene *scene) {
 	Material* green = new Material;
@@ -110,8 +110,8 @@ void createCornelBox(Scene *scene) {
 	////visual expression, here it comes
 	//scene->addObject(t1);
 	//scene->addObject(t2);
-	Object* lightsphere(new Sphere(glm::vec3(0.0f, 7.f, 0.f), 1.f-constants::epsilon, white, true));
-	Light* lightbulb = new PointLight(scene, glm::vec3(0.0f, 7.f, 0.f),4.f*glm::vec3(1.f, 1.f, 1.f), 1.f);
+	Object* lightsphere(new Sphere(glm::vec3(0.0f, 5.6f, 0.f), 1.f-constants::epsilon, white, true));
+	Light* lightbulb = new PointLight(scene, glm::vec3(0.0f, 5.6f, 0.f),5.f*glm::vec3(1.f, 1.f, 1.f), 1.f);
 	scene->addObject(lightsphere);
 	scene->addLight(lightbulb);
 
@@ -149,12 +149,13 @@ int main(int argc, char* argv[]) {
 	diffuse3->shininess = 60.f;
 	diffuse3->ior = 1.5003f;
 
+	//need albedo for correct colorness... mDiffuse is used as albedo but should rather be a diffusion probability
 	Material* buddhaMaterial = new Material;//(new Diffuse(constantDistr)); 
-	buddhaMaterial->mDiffuse = glm::vec3(0.2f, 0.1f, 0.7f);
-	buddhaMaterial->mSpecular = glm::vec3(0.2f);
+	buddhaMaterial->mDiffuse = glm::vec3(0.1f, 0.1f, 0.7f);
+	buddhaMaterial->mSpecular = glm::vec3(0.3f);
 	buddhaMaterial->mTransmission = glm::vec3(1.0f);
-	buddhaMaterial->shininess = 93.f;
-	buddhaMaterial->ior = 1.3003f;
+	buddhaMaterial->shininess = 96.f;
+	buddhaMaterial->ior = 1.3303f;
 
 	std::shared_ptr<ModelOBJ> mObj(new ModelOBJ());
 	if(!mObj->import("buddha.obj"))  {
@@ -163,11 +164,11 @@ int main(int argc, char* argv[]) {
 	}
 	//mObj->normalize(1.8);
 
-	TriangleMesh* buddha = new TriangleMesh(/*buddhaMaterial*/);
+	TriangleMesh* buddha = new TriangleMesh(buddhaMaterial);
 	buddha->setData(mObj);
 
 	std::vector<Object*> refines;
-	buddha->refine(refines, glm::translate(glm::vec3(0.f,-7.f,-0.f)));
+	buddha->refine(refines, glm::translate(glm::vec3(0.f,-7.f,1.f)));
 	for(int i = 0; i < refines.size(); ++i) {
 		scene->addObject(refines[i]);
 	}
@@ -187,12 +188,12 @@ int main(int argc, char* argv[]) {
 		scene->buildAccelerationStructure();
 
 	MySimpleRenderer renderer(iWidth, iHeight, iSamples, scene, 
-						      5,     //Max no. of bounces
-							  true, //global illumination with photon mapping?
-							  10000, //max no. of global photons
-							  10000, //max no. of caustic photons
+						      8,     //Max no. of bounces
+							  true,  //global illumination with photon mapping?
+							  150000, //max no. of global photons
+							  150000, //max no. of caustic photons
 							  10000, //max no. of volume photons for participating media (not yet implemented..., so won't have any effect)
-							  100000);//max photon shots per light
+							  300000);//max photon shots per light
 	//get timestamp for unique filename
     unsigned long long tp= std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 	std::stringstream str;
