@@ -37,6 +37,8 @@ SET(Reco_SRC
   src/Camera.cpp
   src/Tracer.cpp
   src/Object.cpp
+  src/model_obj.cpp
+  src/PhotonMap.cpp
 )
 
 ADD_EXECUTABLE(Reco ${Reco_SRC})
