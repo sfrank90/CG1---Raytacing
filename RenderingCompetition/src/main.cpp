@@ -191,11 +191,11 @@ int main(int argc, char* argv[]) {
 
 	MySimpleRenderer renderer(iWidth, iHeight, iSamples, scene, 
 						      6,     //Max no. of bounces
-							  true,  //global illumination with photon mapping?
-							  130000, //max no. of global photons
-							  130000, //max no. of caustic photons
+							  false,  //global illumination with photon mapping?
+							  13000, //max no. of global photons
+							  13000, //max no. of caustic photons
 							  10000, //max no. of volume photons for participating media (not yet implemented..., so won't have any effect)
-							  300000);//max photon shots per light
+							  100000);//max photon shots per light
 	//get timestamp for unique filename
     unsigned long long tp= std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 	std::stringstream str;
