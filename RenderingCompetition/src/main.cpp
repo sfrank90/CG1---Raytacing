@@ -89,7 +89,7 @@ void createCornelBox(Scene *scene) {
 	//float extend = 2.f;
 	//glm::vec3 normal = glm::vec3(0.f, -1.f, 0.f);
 	//Light* light = new QuadAreaLight(scene, 
-	//	                             7.f*glm::vec3(1.f, 1.f, 1.f),  //power
+	//	                             5.f*glm::vec3(1.f, 1.f, 1.f),  //power
 	//								 glm::vec3(-extend, 7.0-2*constants::epsilon, -extend),
 	//								 glm::vec3(extend,  7.0-2*constants::epsilon, -extend),
 	//								 glm::vec3(extend,  7.0-2*constants::epsilon, extend),
@@ -102,16 +102,16 @@ void createCornelBox(Scene *scene) {
 	//							glm::vec3(extend,  7.0-constants::epsilon, -extend),
 	//							glm::vec3(extend,  7.0-constants::epsilon, extend),
 	//							normal,normal,normal,white,true);
-	//Object* t2   = new Triangle(glm::vec3(extend,  7.0-constants::epsilon, -extend),
-	//							glm::vec3(extend,  7.0-constants::epsilon, extend),
-	//							glm::vec3(-extend, 7.0-constants::epsilon, extend),
+	//Object* t2   = new Triangle(glm::vec3(extend,  7.0-constants::epsilon, extend),
+	//							glm::vec3(-extend,  7.0-constants::epsilon, extend),
+	//							glm::vec3(-extend, 7.0-constants::epsilon, -extend),
 	//							normal,normal,normal,white,true);
 
 	////visual expression, here it comes
 	//scene->addObject(t1);
 	//scene->addObject(t2);
 	Object* lightsphere(new Sphere(glm::vec3(0.0f, 5.6f, 0.f), 1.f-constants::epsilon, white, true));
-	Light* lightbulb = new PointLight(scene, glm::vec3(0.0f, 5.6f, 0.f),5.f*glm::vec3(1.f, 1.f, 1.f), 1.f);
+	Light* lightbulb = new PointLight(scene, glm::vec3(0.0f, 4.6f, 0.f),7.f*glm::vec3(1.f, 1.f, 1.f), 1.f);
 	scene->addObject(lightsphere);
 	scene->addLight(lightbulb);
 
@@ -128,26 +128,27 @@ int main(int argc, char* argv[]) {
 	//Distribution* blackbodyDistr(new BlackBodyDistribution(5200.f)); //5200 kelvin, pretty bright
 
 	//diffuse sphere
-	Material* diffuse = new Material;//(new Diffuse(constantDistr)); 
-	diffuse->mDiffuse = glm::vec3(0.8f, 0.1f, 0.1f);
-	diffuse->mSpecular = glm::vec3(0.1f);
-	diffuse->mTransmission = glm::vec3(0.f);
-	diffuse->shininess = 30.f;
-	//Material* diffuse2 = new Material;//(new Diffuse(constantDistr)); 
-	//diffuse2->mAbsorptionCoeff = 0.2;
-	//diffuse2->mScatterCoeff = 0.5;
-	//diffuse2->mDiffuse = glm::vec3(0.2f, 0.7f, 0.2f);
-	//diffuse2->mSpecular = glm::vec3(0.f);//glm::vec3(0.8f, 0.1f, 0.2f);
-	//diffuse2->mTransmission = glm::vec3(0.0f);
-	//diffuse2->shininess = 0.f;
-	//diffuse2->mParticitatingMedium = false;
+	Material* mat = new Material;//(new Diffuse(constantDistr)); 
+	mat->mDiffuse = glm::vec3(0.8f, 0.1f, 0.1f);
+	mat->mSpecular = glm::vec3(0.1f);
+	mat->mTransmission = glm::vec3(0.f);
+	mat->shininess = 30.f;
 
-	Material* diffuse3 = new Material;//(new Diffuse(constantDistr)); 
-	diffuse3->mDiffuse = glm::vec3(0.01f);
-	diffuse3->mSpecular = glm::vec3(0.0f);
-	diffuse3->mTransmission = glm::vec3(1.0f);
-	diffuse3->shininess = 60.f;
-	diffuse3->ior = 1.5003f;
+	Material* mat2 = new Material;//(new Diffuse(constantDistr)); 
+	//mat2->mAbsorptionCoeff = 0.2;
+	//mat2->mScatterCoeff = 0.5;
+	mat2->mDiffuse = glm::vec3(0.0f, 0.0f, 0.0f);
+	mat2->mSpecular = glm::vec3(1.f);//glm::vec3(0.8f, 0.1f, 0.2f);
+	mat2->mTransmission = glm::vec3(0.0f);
+	mat2->shininess = 0.f;
+	//mat2->mParticitatingMedium = false;
+
+	Material* mat3 = new Material;//(new Diffuse(constantDistr)); 
+	mat3->mDiffuse = glm::vec3(0.01f);
+	mat3->mSpecular = glm::vec3(0.0f);
+	mat3->mTransmission = glm::vec3(1.0f);
+	mat3->shininess = 60.f;
+	mat3->ior = 1.5003f;
 
 	//need albedo for correct colorness... mDiffuse is used as albedo but should rather be a diffusion probability
 	Material* buddhaMaterial = new Material;//(new Diffuse(constantDistr)); 
@@ -157,24 +158,25 @@ int main(int argc, char* argv[]) {
 	buddhaMaterial->shininess = 96.f;
 	buddhaMaterial->ior = 1.3303f;
 
-	std::shared_ptr<ModelOBJ> mObj(new ModelOBJ());
-	if(!mObj->import("buddha.obj"))  {
-		std::cerr << "Could not load" << std::endl;
-		return 0;
-	}
-	//mObj->normalize(1.8);
+	//std::shared_ptr<ModelOBJ> mObj(new ModelOBJ());
+	//if(!mObj->import("buddha.obj"))  {
+	//	std::cerr << "Could not load" << std::endl;
+	//	return 0;
+	//}
+	////mObj->normalize(1.8);
 
-	TriangleMesh* buddha = new TriangleMesh(buddhaMaterial);
-	buddha->setData(mObj);
+	//TriangleMesh* buddha = new TriangleMesh(buddhaMaterial);
+	//buddha->setData(mObj);
 
-	std::vector<Object*> refines;
-	buddha->refine(refines, glm::translate(glm::vec3(0.f,-7.f,1.f)));
-	for(int i = 0; i < refines.size(); ++i) {
-		scene->addObject(refines[i]);
-	}
+	//std::vector<Object*> refines;
+	//buddha->refine(refines, glm::translate(glm::vec3(0.f,-7.f,0.f)));
+	//for(int i = 0; i < refines.size(); ++i) {
+	//	scene->addObject(refines[i]);
+	//}
 
-	Object* sphere(new Sphere(glm::vec3(3.6f, -4.8f, -5.f), 2.f, diffuse));
-	Object* sphere2(new Sphere(glm::vec3(-3.6f, -4.3f, -5.f), 2.3f, diffuse3));
+	Object* sphere(new Sphere(glm::vec3(3.6f, -4.8f, -4.5f), 2.f, mat));
+	Object* sphere2(new Sphere(glm::vec3(0.f, -4.3f, -2.f), 2.5f, mat3));
+	Object* sphere3(new Sphere(glm::vec3(-3.6f, -4.8f, -4.5f), 2.f, mat2));
 
 	scene->addObject(sphere);
 	scene->addObject(sphere2);
@@ -188,10 +190,10 @@ int main(int argc, char* argv[]) {
 		scene->buildAccelerationStructure();
 
 	MySimpleRenderer renderer(iWidth, iHeight, iSamples, scene, 
-						      8,     //Max no. of bounces
+						      6,     //Max no. of bounces
 							  true,  //global illumination with photon mapping?
-							  150000, //max no. of global photons
-							  150000, //max no. of caustic photons
+							  130000, //max no. of global photons
+							  130000, //max no. of caustic photons
 							  10000, //max no. of volume photons for participating media (not yet implemented..., so won't have any effect)
 							  300000);//max photon shots per light
 	//get timestamp for unique filename
